@@ -1,0 +1,126 @@
+var utils = require('users/vieiramesquita/LAPIG-GEE:CURSO_GEE_LAPIG/UTILITARIOS')
+/************ S01-RECUPERAR-IMAGEM ************
+
+  Para visualizar/exportar dados de seu interesse, 
+  voce pode selecionar dados satelitarios alterando as variaveis:
+  - "satelite", "realce", "data_inicial" e data_final.
+
+************ OPCOES ************
+
+  **** TRMM 3B43 V7 (GLOBAL)
+    var satelite = 'TRMM' 
+    var realce = 'Chuva' 
+    var data_inicial = '1998-01-01'
+    var data_final = '2018-07-28'
+    
+  **** ALOS PALSAR 30M (GLOBAL)
+    var satelite = 'ALOS' 
+    var realce = 'ALT' 
+    nao necessita de data_inicial e/ou data_final
+  **** SRTM V4 30M (GLOBAL)
+    var satelite = 'SRTM' 
+    var realce = 'ALT' 
+    nao necessita de data_inicial e/ou data_final
+  
+  **** MOD11A2 TEMPERATURA DE SUPERFICIE (GLOBAL)
+    var satelite = 'MOD11' 
+    var realce = 'TEMP' 
+    var data_inicial = '2000-03-05'
+    var data_final = '2018-07-28'  
+  **** MOD13Q1 INDICE DE VEGETACAO (GLOBAL)
+    var satelite = 'MOD13' 
+    var realce = 'NDVI' ou 'EVI' ou 'Agri'
+    var data_inicial = '2000-02-18'
+    var data_final = '2018-07-28'  
+  **** MOD16A2 EVAPOTRANSPIRACAO (GLOBAL)
+    var satelite = 'MOD16' 
+    var realce = 'ET' ou 'PET'
+    var data_inicial = '2000-01-01'
+    var data_final = '2018-07-28' 
+  
+  **** LANDSAT 5
+    var satelite = 'L5_TOA' ou 'L5_SR'
+    var realce = 'Agri' ou 'False' ou 'True'
+    var data_inicial = '1984-03-01'
+    var data_final = 2012-05-05
+  **** LANDSAT 7
+    var satelite = 'L7_TOA' ou 'L7_SR'
+    var realce = 'Agri' ou 'False' ou 'True'
+    var data_inicial = '1999-01-01'
+    var data_final = '2018-07-28' 
+  **** LANDSAT 8
+    var satelite = 'L8_TOA' ou 'L8_SR'
+    var realce = 'Agri' ou 'False' ou 'True'
+    var data_inicial = '2013-04-11'
+    var data_final = '2018-07-28' 
+  
+  **** SENTINEL 1
+    var satelite = 'S1' 
+    var realce = 'SAR' 
+    var data_inicial = '2014-10-03'
+    var data_final = '2018-07-28'
+  **** SENTINEL 2
+    var satelite = 'S2' 
+    var realce = 'Agri' ou 'False' ou 'False20' ou 'True'
+    var data_inicial = '2015-06-23 '
+    var data_final = '2018-07-28'
+  **** SENTINEL 2
+    var satelite = Sentinel 3: 'S3'
+    var realce = 'False' ou 'True'
+    var data_inicial = '2016-10-18'
+    var data_final = '2018-07-28'
+
+************ GLOSSARIO ************
+
+  'TOA': Reflectancia de topo de atmosfera
+  'SR': Reflectancia de superficie
+  'Chuva': Coloracao padrao do dado. e.g. precipitacao em mm/h
+  'ALT': Altitude/Elevacao em metros
+  'TEMP': Temperatura de Superficie (LST)
+  'NDVI': Indice de vegetacao com diferenca normalizada (Nir-Red / Nir+Red)
+  'EVI': Indice de vegetacao melhorado (2.5 * (Nir - Red)/ 1 + Nir + 6*Red + 7.5*Blue)
+  'ET'/'PET': Evapotranspiracao total / Evapotranspiracao potencial total em mm
+  'Agri': Compoiscao colorida utilizada na deteccao de areas agricolas (Swir/Nir/Red)
+  'False': Composicao colorida utilizada para dar enfase a vegetacao (Nir/Swir/Red ou Nir/Red/Green)
+  'False20': Semelhante ao 'False', porém realiza a composição com as bandas de 20m de Sentinel 2
+  'True': Composicao colorida que reproduz as cores "naturais" (Red/Green/Blue)
+  'SAR': Diferenca de eixo de polarizacao (Radar - VV,VH,VV/VH)
+
+************************************/
+
+var satelite = 'S2';
+var realce = 'False'
+var data_inicial = '2018-01-01';
+var data_final = '2018-01-31';
+var bandas = ['']
+var diretorio_destino = 'GOOGLE_GEE_DIR'
+
+//Mascaras de recorte
+var paises = utils.vetores.paises.filter(ee.Filter.eq('Country', 'United States'));
+var brasil = utils.vetores.brasil
+var bioma = utils.vetores.biomas.filter(ee.Filter.eq('NM_BIOMA','CERRADO'))
+var estado = utils.vetores.estados.filter(ee.Filter.eq('NM_UF','GO'))
+var municipio = utils.vetores.municipios.filter(ee.Filter.eq('CD_GEOCMU','5208707'))
+var bhrv = utils.vetores.BHRV
+
+var NDVI = "((NIR - RED) /(NIR + RED))"
+var NDVI_REALCE = { min: -0.1, max: 0.95, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+//utils.recuperarImagens(satelite, realce, data_inicial, data_final, diretorio_destino)
+
+/************************************
+
+  Voce tambem pode realizar buscas por coordenadas;
+  Basta apenas remover o comentario das linhas abaixo e digitar a latitude
+  e longitude do local desejado
+
+************************************/
+var expressao = NDVI
+var mascara = municipio
+var nome_sufixo = 'CUBO_NDVI_S2'
+var lon = null
+var lat = null
+//var data_inicial = '2018-01-01';
+//var data_final = '2018-01-31';
+
+
+utils.recuperarImagens_plus_cube_indice(satelite, realce, data_inicial, data_final, diretorio_destino, null, lat, lon,mascara,expressao,nome_sufixo)

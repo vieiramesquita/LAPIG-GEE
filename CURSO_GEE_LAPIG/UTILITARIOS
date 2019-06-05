@@ -1,0 +1,2234 @@
+//########################## COLECOES DE IMAGENS #####################################
+var series = {
+  TRMM : 'TRMM/3B43V7',
+  CHIRPS: 'UCSB-CHG/CHIRPS/DAILY',
+  GPM : 'NASA/GPM_L3/IMERG_V05',
+  SRTM : 'USGS/SRTMGL1_003',
+  ALOS : 'JAXA/ALOS/AW3D30_V1_1',
+  
+  MOD11 : 'MODIS/006/MOD11A2',
+  MOD13 : 'MODIS/006/MOD13Q1',
+  MOD16 : 'MODIS/006/MOD16A2',
+  
+  S1 : 'COPERNICUS/S1_GRD',
+  S2 : 'COPERNICUS/S2',
+  S3 : 'COPERNICUS/S3/OLCI',
+  
+  L5_TOA : 'LANDSAT/LT05/C01/T1_TOA',
+  L7_TOA : 'LANDSAT/LE07/C01/T1_TOA',
+  L8_TOA : 'LANDSAT/LC08/C01/T1_TOA',
+  
+  L5_SR : 'LANDSAT/LT05/C01/T1_SR',
+  L7_SR : 'LANDSAT/LE07/C01/T1_SR',
+  L8_SR : 'LANDSAT/LC08/C01/T1_SR',
+  
+  DRONE: {mosaico: 'users/vieiramesquita/LAPIG/DRONE_2018_04_FAZ_MRD_MOSAIC' ,dsm: 'users/vieiramesquita/LAPIG/DRONE_2018_04_FAZ_MRD_DSM' }
+  
+};
+//####################################################################################
+ 
+//##########################  VETORES  ###############################################
+var vetores = {
+  paises : ee.FeatureCollection('ft:1tdSwUL7MVpOauSgRzqVTOwdfy17KDbw-1d9omPw'),
+  BHRV : ee.FeatureCollection('ft:1_jmtRJvXur_ZYKd_x5GhOHqv7080yc0TnJsnBDq-'),
+  brasil : ee.FeatureCollection('ft:1hJRTBAqMrG_XzcYD0sABWznByoROFEnvS3skLJ94'),
+  biomas : ee.FeatureCollection('ft:1b3y6EUY8uo50D8CmgLOtyK9KGyMuSGemmPvAV5m9'),
+  estados : ee.FeatureCollection('ft:1UW0aUR6HACAnm0rJa4ITbgKgU2rQjulZH3X1f6uq'),
+  municipios : ee.FeatureCollection('ft:1cF6aFtJZnfLpCry5cgZVhqFtj3tg8B4f-3ZJJeHT')
+};  
+//####################################################################################
+
+//########################## BANDAS  #################################################
+
+var bandas = {
+  TRMM : ["precipitation"],
+  CHIRPS: ['precipitation'],
+  GPM : ['precipitationCal'],
+  SRTM : ['elevation'],
+  ALOS : ['AVE'],
+  MOD11 : ['LST_Day_1km'],
+  MOD13 : ['NDVI','EVI','sur_refl_b01','sur_refl_b02','sur_refl_b03','sur_refl_b07'],
+  MOD16 : ['ET','PET'],
+  S1 : ['VV','VH','angle'],
+  S2 : ['B1','B2','B3','B4','B5','B6','B7','B8','B8A','B11','B12'],
+  S3 : ['Oa04_radiance','Oa06_radiance','Oa08_radiance','Oa11_radiance','Oa12_radiance','Oa17_radiance'],
+  L5_TOA : ['B1','B2','B3','B4','B5','B7'],
+  L7_TOA : ['B1','B2','B3','B4','B5','B7'],
+  L8_TOA : ['B1','B2','B3','B4','B5','B6','B7'],
+  L5_SR : ['B1','B2','B3','B4','B5','B7'],
+  L7_SR : ['B1','B2','B3','B4','B5','B7'],
+  L8_SR : ['B1','B2','B3','B4','B5','B6','B7'],
+  DRONE: ['b1','b2','b3','dsm']
+};
+bandas.L7_TOA = bandas.L5_TOA;
+bandas.L7_SR = bandas.L5_SR;
+//####################################################################################
+
+//########################## ESCALAS DE PIXEL ########################################
+
+var escala = {
+  TRMM : 27000,
+  CHIRPS: 5500,
+  GPM : 10700,
+  MOD11 : 1000,
+  MOD13 : 250,
+  MOD16 : 500,
+  L5_TOA: 30,
+  S1: 10,
+  S3: 300,
+};
+escala.SRTM = escala.ALOS = escala.L5_SR = escala.L7_SR = escala.L7_TOA = escala.L8_SR = escala.L8_TOA = escala.L5_TOA;
+escala.S2 = escala.S1;
+
+//####################################################################################
+
+//########################## REALCES DE COMPOSICOES  #################################
+
+var realces = {
+  TRMM: { 
+    CHUVA:  {bands: "precipitation",max: 3000,min:0, 
+    palette: ['#dee9fc','#aac6f7','#769fe8','#4d7ed6','#2c64c9','#0e51cc','#003eb2']}
+  },
+    CHIRPS: { 
+    CHUVA:  {bands: "precipitation",max: 150,min:0, 
+    palette: ['#dee9fc','#aac6f7','#769fe8','#4d7ed6','#2c64c9','#0e51cc','#003eb2']}
+  },
+  GPM: { 
+    CHUVA:  {bands: "precipitationCal",max: 500,min:0, 
+    palette: ['#dee9fc','#aac6f7','#769fe8','#4d7ed6','#2c64c9','#0e51cc','#003eb2']}
+  },
+  ALOS: {
+    ALT : {bands:'AVE',min: 0, max: 4500,palette: ["#000000","#16e5e5","#225613","#99bf13","#efec51","#d1a13a",
+    "#ce7725","#773511","#441c06","#441006","#6f7784","#b6bac1","#ffffff"]}
+  },
+  SRTM: {
+    ALT : {bands:'elevation',min: 0, max: 4500,palette: ["#000000","#16e5e5","#225613","#99bf13","#efec51","#d1a13a",
+    "#ce7725","#773511","#441c06","#441006","#6f7784","#b6bac1","#ffffff"]}
+  //('<RasterSymbolizer>' +
+  //  '<ColorMap type="ramp" extended="false" >' +
+  //    '<ColorMapEntry color="#000000" quantity="0" label="0"/>' +
+  //    '<ColorMapEntry color="#16e5e5" quantity="1" label="1"/>' +
+  //    '<ColorMapEntry color="#225613" quantity="200" label="200" />' +
+  //    '<ColorMapEntry color="#99bf13" quantity="500" label="500" />' +
+  //    '<ColorMapEntry color="#efec51" quantity="750" label="750" />' +      
+  //    '<ColorMapEntry color="#d1a13a" quantity="1000" label="1000" />' +      
+  //    '<ColorMapEntry color="#ce7725" quantity="1250" label="1250" />' +
+  //    '<ColorMapEntry color="#773511" quantity="1500" label="1500" />' +
+  //    '<ColorMapEntry color="#441c06" quantity="2000" label="2000" />' +
+  //    '<ColorMapEntry color="#441006" quantity="2500" label="2500" />' +      
+  //    '<ColorMapEntry color="#6f7784" quantity="3000" label="3000" />' +
+  //    '<ColorMapEntry color="#b6bac1" quantity="4000" label="4000" />' +
+  //    '<ColorMapEntry color="#ffffff" quantity="6000" label="6000" />' +
+  //  '</ColorMap>' +
+  //'</RasterSymbolizer>')
+    
+  },
+  MOD11: { 
+    TEMP:  {bands: "LST_Day_1km",min:10,max: 40, 
+     palette: ['#0000ff','#00ffff','#ffff00','#ff0000','#70140a']}
+  },
+  MOD13: { 
+    NDVI:  {bands: "NDVI",min: 2500,max:10000, 
+       palette: ['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901',
+       '#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']},
+    EVI:  {bands: "NDVI",min: 2500,max:10000, 
+       palette: ['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901','#66A000','#529400',
+       '#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']},
+    AGRI:   {bands:['sur_refl_b07','sur_refl_b02,sur_refl_b01'],
+        min : [520.69,404.81,245.75], max : [6082.53,5908.84,5000.5], gamma : [1.1,1.1,1.1]},
+  },
+  MOD16: { 
+    ET:  {bands: "ET",min: 10,max:1200, 
+     palette: ['#dee9fc','#aac6f7','#769fe8','#4d7ed6','#2c64c9','#0e51cc','#003eb2']},
+    PET:  {bands: "PET",min: 10,max:800, 
+     palette: ['#dee9fc','#aac6f7','#769fe8','#4d7ed6','#2c64c9','#0e51cc','#003eb2']}
+  },
+  S1: {
+    SAR : {bands: ['VV','VH','VV_VH'],min:[-0.05,0,-0.15],max:[0.15,0.05,9],}
+    //SAR : {bands: ['VV','VH','VV_VH'],min:[-20,-25,0.15],max:[10,0,0.9],}
+  },
+  S2: {
+    FALSE : {bands: ['B8','B4','B3'],
+    min : [1104.81,700.75,600], max : [4000.84,2800.5,2400],gamma : [1.1,1.1,1.1]},
+    
+    FALSE20 :{ bands: ['B8A','B11','B5'],
+    min : [1204.81,1020.69,445.75], max : [4808.84,4582.53,3099.5], gamma : [1.1,1.1,1.1]},
+    
+    AGRI :{ bands: ['B11','B8A','B5'],
+    min : [1220.69,1504.81,645.75], max : [3982.53,3208.84,1899.5], gamma : [1.1,1.1,1.1]},
+    
+    TRUE : {bands: ['B4','B3','B2'],
+    min : [600,550,550], max : [2100,2200,2200], gamma : [1.35,1.55,1.15]}
+  },
+  S3: {
+    FALSE : {bands: ['Oa17_radiance','Oa11_radiance','Oa08_radiance'],
+    min : [7,10,5.25], max : [150,150,150],gamma : [1.1,1.1,1.1]},
+    TRUE : {bands: ['Oa08_radiance','Oa06_radiance','Oa04_radiance'],
+    min : [7,10,25], max : [75,75,75],gamma : [1.1,1.1,1.1]},
+  },
+  L5_TOA :{
+    FALSE : {bands: ['B4','B5','B3'],
+    min : [0.150481,0.122069,0.064575], max : [0.320884,0.398253,0.18995],gamma : [1.1,1.1,1.1]},
+    
+    AGRI :{ bands: ['B5','B4','B3'],
+    min : [0.122069,0.150481,0.064575], max : [0.398253,0.320884,0.18995], gamma : [1.1,1.1,1.1]},
+    
+    TRUE : {bands: ['B3','B2','B1'],
+    min : [0.06,0.06,0.08], max : [0.19,0.18,0.19], gamma : [1.35,1.6,1.15]}
+    },
+  L5_SR :{
+    FALSE : {bands: ['B4','B5','B3'],
+    min : [1504.81,1220.69,645.75], max : [3208.84,3982.53,1899.5],gamma : [1.1,1.1,1.1]},
+    
+    AGRI :{ bands: ['B5','B4','B3'],
+    min : [1220.69,1504.81,645.75], max : [3982.53,3208.84,1899.5], gamma : [1.1,1.1,1.1]},
+    
+    TRUE : {bands: ['B3','B2','B1'],
+    min : [300,350,250], max : [2000,1900,1100], gamma : [1.35,1.6,1.15]}
+    },
+  L8_TOA :{
+    FALSE : {bands: ['B5','B6','B4'],
+    min : [0.120481,0.102069,0.044575], max : [0.480884,0.458253,0.18995],gamma : [1.1,1.1,1.1]},
+    
+    AGRI :{ bands: ['B6','B5','B4'],
+    min : [0.102069,0.120481,0.044575], max : [0.458253,0.480884,0.18995], gamma : [1.1,1.1,1.1]},
+    
+    TRUE : {bands: ['B4','B3','B2'],
+    min : [0.06,0.055,0.07], max : [0.22,0.22,0.21], gamma : [1.35,1.5,1.15]}
+    },
+  L8_SR :{
+    FALSE : {bands: ['B5','B6','B4'],
+    min : [1204.81,1020.69,445.75], max : [4808.84,4582.53,1899.5],gamma : [1.1,1.1,1.1]},
+    
+    AGRI :{ bands: ['B6','B5','B4'],
+    min : [1020.69,1204.81,445.75], max : [4582.53,4808.84,1899.5], gamma : [1.1,1.1,1.1]},
+    
+    TRUE : {bands: ['B4','B3','B2'],
+    min : [250,150,150], max : [1800,1550,1000], gamma : [1.35,1.6,1.15]}
+    },
+  DRONE: {
+    TRUE : {bands: ['b1','b2','b3'],min:[937,1443,1107],max:[8323,7538,7785]},
+    ALT : {bands: 'elevation', palette: ['#0d46ba' ,'#fffd99','#db1c1c'], min: 450,max:525}
+    }
+  };
+realces['L7_TOA'] =  realces['L5_TOA'];
+realces['L7_SR'] = realces['L5_SR'];
+
+//####################################################################################
+
+//############################  FILTRAGEM DE NUVEM  ##################################
+
+var filtro_nuvem = {
+  L5_TOA: "(b('BQA') == 672)", 
+  L8_TOA: "(b('BQA') == 2720)",
+  L5_SR: "(b('pixel_qa') <= 68)", 
+  L8_SR: "(b('pixel_qa') <= 324)",
+  S2: "(b('QA60') == 0)",
+  S3: "(b('quality_flags') == 2155872256) || (b('quality_flags') == 2147483648) || (b('quality_flags') == 2684354560)",
+  MOD13: "(b('SummaryQA') <= 1)",
+  MOD11: "(b('QC_Day') <= 1)",
+  MOD16: "(b('ET_QC') <= 1)"
+};
+filtro_nuvem.L7_TOA = filtro_nuvem.L5_TOA;
+filtro_nuvem.L7_SR = filtro_nuvem.L5_SR;
+//####################################################################################
+
+//############################  PROPRIEDADE DE COBERTURA DE NUVEM  ###################
+
+var cobertura_nuvem = {
+  L5_TOA: 'CLOUD_COVER',
+  S2: 'CLOUDY_PIXEL_PERCENTAGE'
+};
+cobertura_nuvem.L8_SR = cobertura_nuvem.L8_TOA = cobertura_nuvem.L7_SR = cobertura_nuvem.L7_TOA = cobertura_nuvem.L5_SR = cobertura_nuvem.L5_TOA;
+
+//####################################################################################
+
+//######################################  ADICIONAR LAYERS  ##########################
+
+var addLayer = function(imagem,satelite,realce,nome,indice_realce,label) {
+  if(label){nome = label}
+  if(indice_realce){
+    Map.addLayer(imagem, indice_realce, nome);
+  } else {
+    realce = realce.toUpperCase()
+     if (satelite !== 'ALOS' && satelite !== 'SRTM' && satelite !== 'MOD11' && satelite !== 'MOD16' && satelite !== 'TRMM'
+     && satelite !== 'GPM' && satelite !== 'S1'){
+      if (realce) {
+        Map.addLayer(imagem, realces[satelite][realce], nome)
+      }
+    } else if( satelite == 'TRMM'){
+      imagem = imagem.select(0).multiply(720)
+      if (realce) {
+        Map.addLayer(imagem, realces[satelite][realce], nome);
+      }
+    } else if( satelite == 'GPM'){
+      imagem = imagem.select(0).multiply(24)
+      if (realce) {
+        Map.addLayer(imagem, realces[satelite][realce], nome);
+      }
+    } else if( satelite == 'MOD11'){
+      imagem = imagem.select(0).multiply(0.02).subtract(273);
+      imagem = imagem.mask(imagem.gt(-273))
+      if (realce) {
+        Map.addLayer(imagem, realces[satelite][realce], nome);
+      }
+    } else if( satelite == 'MOD16'){
+      imagem = imagem.select(0).multiply(0.1);
+      imagem = imagem.mask(imagem.gt(0))
+      if (realce) {
+        Map.addLayer(imagem, realces[satelite][realce], nome);
+      }
+    }else if( satelite === 'S1') {
+      
+      //var mask_HighA = imagem.select('angle').lt(45).multiply(imagem.select('angle').gt(31))
+      var mask_polar = imagem.select('VV').divide(imagem.select('VH'))
+      imagem = imagem.addBands(ee.Image(imagem.select('VV').divide(imagem.select('VH'))).select([0],['VV_VH']))
+      
+      //imagem = imagem.mask(mask_polar.lt(0.7))
+      
+      //var ring = ee.Geometry.LinearRing(ee.Geometry(ee.Geometry.MultiPolygon(imagem.geometry().coordinates()).geometries().get(0)).coordinates().get(0))
+      
+      //var xoff = ee.Number(ee.List(ring.coordinates().get(0)).get(1))
+      //var yoff = ee.Number(ee.List(ring.coordinates().get(0)).get(0))
+      //var xin = ee.Number(ee.List(ring.coordinates().get(2)).get(1))
+      //var yin = ee.Number(ee.List(ring.coordinates().get(2)).get(0))
+      //
+      //var coords = imagem.geometry().coordinates()
+      
+      //if (xoff > xin){
+      //  xoff = xoff.subtract(0.01)
+      //  xin = xin.add(0.01)
+      //} else {
+      //  xoff = xoff.add(0.01)
+      //  xin = xin.subtract(0.01)
+      //}
+      //
+      //if (yoff > yoff){
+      //  xoff = xoff.subtract(0.05)
+      //  xin = xin.add(0.05)
+      //} else {
+      //  xoff = xoff.add(0.05)
+      //  xin = xin.subtract(0.05)
+      //}
+      
+      //print(xoff,yoff,xin,yin)
+      
+      //var chesstable = ee.Geometry.MultiLineString([[[yin, xoff],[yin, xin]],[[yin, xoff],[yin, xin]],
+      //  [[yoff, xin],[yin, xin]],[[yoff, xin],[yin,xin]]]);
+      
+      //imagem = imagem.mask(mask_HighA);
+      
+      if (realce) {
+          Map.addLayer(imagem, realces[satelite][realce], nome);
+          //Map.addLayer(ring,{},'ring "A ding ding');
+          //Map.addLayer(chesstable,{},'RING RING');
+        }
+      }
+    else{
+      if (realce) {
+        imagem = imagem.select(0)
+        Map.addLayer(imagem,realces[satelite][realce], nome);
+      }
+    }
+  }
+  return imagem
+};
+
+//####################################################################################
+
+//############################## MAPA DE BANDAS ######################################
+
+var mapa_bandas = function (satelite,img) {
+  var key = {
+    L5_TOA: {'SWIR2': img.select('B7'),
+             'SWIR1': img.select('B5'),
+             'NIR': img.select('B4'),
+             'RED': img.select('B3'),
+             'GREEN': img.select('B2'),
+             'BLUE': img.select('B1')
+    },
+    L8_TOA: {'SWIR2': img.select('B7'),
+             'SWIR1': img.select('B6'),
+             'NIR': img.select('B5'),
+             'RED': img.select('B4'),
+             'GREEN': img.select('B3'),
+             'BLUE': img.select('B2'),
+             'BLUE_COSTAL': img.select('B1')
+    },
+    MOD13:  {'RED': img.select('sur_refl_b01'),
+             'NIR': img.select('sur_refl_b02'),
+             'BLUE': img.select('sur_refl_b03'),
+             'SWIR1': img.select('sur_refl_b07'),
+             'NDVI': img.select('NDVI'),
+             'EVI': img.select('EVI')
+    },
+    MOD11: {'TEMP': img.select('LST_Day_1km')
+    },
+    S1:      {'VV': img.select('VV'),
+             'VH': img.select('VH'),
+             'VV_VH': img.select('VV_VH'),
+             'ANGLE': img.select('angle')
+    },
+    S2:      {'SWIR2': img.select('B12'),
+             'SWIR1': img.select('B11'),
+             'REDEDGE4': img.select('B8A'),
+             'NIR': img.select('B8'),
+             'REDEDGE3': img.select('B7'),
+             'REDEDGE2': img.select('B6'),
+             'REDEDGE1': img.select('B5'),
+             'RED': img.select('B4'),
+             'GREEN': img.select('B3'),
+             'BLUE': img.select('B2'),
+             'BLUE_COSTAL': img.select('B1')
+    },
+    S3:      {'NIR': img.select('Oa17_radiance'),
+             'REDEDGE2': img.select('Oa12_radiance'),
+             'REDEDGE1': img.select('Oa11_radiance'),
+             'RED': img.select('Oa08_radiance'),
+             'GREEN': img.select('Oa06_radiance'),
+             'BLUE': img.select('Oa04_radiance'),
+    },
+  };
+  key.L7_SR = key.L7_TOA = key.L5_SR = key.L5_TOA;
+  key.L8_SR = key.L8_TOA;
+  return key[satelite];
+};
+
+var rawRadar2db = (function(i) {
+//return i
+ return ee.Image(ee.Image.constant(10.0).pow(i.divide(10.0)).copyProperties(i).copyProperties(i, ['system:time_start'])).addBands(i.select('angle'), ['angle'], true);
+})
+
+//####################################################################################
+
+var recuperarImagens = function(satelite, realce, data_inicial, data_final, googleDriveDir, novasBandas, lat, long,mask_cloud) {
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  var coord_ponto
+  if (lat && long) {
+    coord_ponto = ee.Geometry.Point(long,lat)
+    Map.centerObject(coord_ponto, 11);
+  } else {
+    coord_ponto = ee.Geometry(Map.getCenter(true))
+  }
+  
+  var colecaoImage;
+
+  if (satelite !== 'ALOS' && satelite !== 'SRTM', satelite !== 'DRONE'){
+    colecaoImage= ee.ImageCollection(colecaoId)
+    .filterBounds(coord_ponto)
+    .filterDate(data_inicial, data_final)
+    .select(bandasSelecionadas)
+    
+  }
+  else if (satelite === 'DRONE') {
+    colecaoImage= ee.Image(colecaoId.mosaico).addBands(ee.Image(colecaoId.dsm).rename('elevation'))
+  }
+  else{
+    colecaoImage= ee.Image(colecaoId)
+    .select(bandasSelecionadas)
+  }
+  
+  var lista;
+  var listaDeImages;
+  
+  if (satelite !== 'ALOS' && satelite !== 'SRTM' && satelite !== 'S1' && satelite !== 'DRONE'){
+  listaDeImages = colecaoImage.iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else if (satelite === 'S1') {
+  listaDeImages = colecaoImage.filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"]).iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else {
+   lista = ee.List([])
+   var satNome;
+  
+   if(satelite==='ALOS'){satNome = 'ALOS_PALSAR_30M'}else if (satelite==='SRTM'){satNome = 'SRTM_30M'}
+  
+   if (satelite!=='DRONE'){
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': satNome,
+        'id': ee.String(colecaoId)
+      }))
+   } else {
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': 'DRONE_LAPIG',
+        'id': colecaoImage
+      }))
+    }
+  }
+  
+  listaDeImages.evaluate(function(listaDeImages) {
+    listaDeImages.forEach(function(img) {
+      var imagem;
+
+      if (satelite!=='DRONE'){ imagem = ee.Image(img.id)}
+      else {imagem = colecaoImage}
+      
+      var nome = img.nome
+      
+      if(satelite==='MOD13'){nome = 'MOD13Q1_'+nome}
+      else if(satelite==='MOD11'){nome = 'MOD11A2_'+nome}
+      else if(satelite==='MOD16'){nome = 'MOD16A2_'+nome}
+      else if(satelite==='TRMM'){nome = 'TRMM_'+nome}
+      else if(satelite==='CHIRPS'){nome = 'CHIRPS_'+nome}
+      
+      if (satelite == 'S1'){
+        imagem = rawRadar2db(imagem)
+        imagem = imagem.addBands(ee.Image(imagem.select('VV').divide(imagem.select('VH'))).select([0],['VV_VH']));
+        var geoImagem = imagem.geometry()//.buffer(-5500)
+        imagem = imagem.clip(geoImagem)
+      }
+      
+      if (mask_cloud){
+      
+        var mascara_nuvem;
+  
+        if (filtro_nuvem[satelite]) {
+    
+            if (satelite == 'S2' || satelite == 'S3'){
+              mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))
+    
+            } else {
+              mascara_nuvem = imagem.expression(filtro_nuvem[satelite])
+            }
+    
+          imagem = imagem.mask(mascara_nuvem);
+        }
+      }
+      
+      //var faz_agrotools = ee.FeatureCollection('users/vieiramesquita/agrotools')//
+      
+      //var mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))//
+      //imagem = imagem.mask(mascara_nuvem).select(bandasSelecionadas).clip(faz_agrotools)//
+
+      imagem = addLayer(imagem,satelite,realce,nome).select(bandasSelecionadas)
+      
+      if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+        imagem = imagem.multiply(10000).toInt16();
+      }
+      
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'MOD16' && satelite !== 'CHIRPS' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+      }
+      
+      Export.image.toDrive({
+        image: imagem,
+        description: nome,
+        folder: googleDriveDir,
+        fileNamePrefix: nome,
+        region:imagem.geometry(),
+        //region:faz_agrotools.geometry(),
+        scale: escala[satelite], // Escala parametro
+        maxPixels: 1E13
+      });
+      
+    })
+    if (lat && long) {
+      Map.addLayer(coord_ponto,{},'Coordenada');
+    }
+    
+  })
+}
+
+var recuperarImagens_plus = function(satelite, realce, data_inicial, data_final, googleDriveDir, novasBandas, lat, long,mascara,mask_cloud) {
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+  
+  var coord_ponto
+  if (lat && long) {
+    coord_ponto = ee.Geometry.Point(long,lat)
+    Map.centerObject(coord_ponto, 11);
+  }else if (mascara){
+    coord_ponto = mascara
+    Map.centerObject(mascara);
+  } else {
+    coord_ponto = ee.Geometry(Map.getCenter(true))
+  }
+  
+  var colecaoImage;
+
+  if (satelite !== 'ALOS' && satelite !== 'SRTM', satelite !== 'DRONE'){
+    colecaoImage= ee.ImageCollection(colecaoId)
+    .filterBounds(coord_ponto)
+    .filterDate(data_inicial, data_final)
+    .select(bandasSelecionadas)
+    
+  }
+  else if (satelite === 'DRONE') {
+    colecaoImage= ee.Image(colecaoId.mosaico).addBands(ee.Image(colecaoId.dsm).rename('elevation'))
+  }
+  else{
+    colecaoImage= ee.Image(colecaoId)
+    .select(bandasSelecionadas)
+  }
+  
+  var lista;
+  var listaDeImages;
+  
+  if (satelite !== 'ALOS' && satelite !== 'SRTM' && satelite !== 'S1' && satelite !== 'DRONE'){
+  listaDeImages = colecaoImage.iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else if (satelite === 'S1') {
+  listaDeImages = colecaoImage.filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"]).iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else {
+   lista = ee.List([])
+   var satNome;
+  
+   if(satelite==='ALOS'){satNome = 'ALOS_PALSAR_30M'}else if (satelite==='SRTM'){satNome = 'SRTM_30M'}
+  
+   if (satelite!=='DRONE'){
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': satNome,
+        'id': ee.String(colecaoId)
+      }))
+   } else {
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': 'DRONE_LAPIG',
+        'id': colecaoImage
+      }))
+    }
+  }
+  
+  listaDeImages.evaluate(function(listaDeImages) {
+    listaDeImages.forEach(function(img) {
+      var imagem;
+
+      if (satelite!=='DRONE'){ imagem = ee.Image(img.id)}
+      else {imagem = colecaoImage}
+      
+      var nome = img.nome
+      
+      if(satelite==='MOD13'){nome = 'MOD13Q1_'+nome}
+      else if(satelite==='MOD11'){nome = 'MOD11A2_'+nome}
+      else if(satelite==='MOD16'){nome = 'MOD16A2_'+nome}
+      else if(satelite==='CHIRPS'){nome = 'CHIRPS_'+nome}
+      
+      //var faz_agrotools = ee.FeatureCollection('users/vieiramesquita/agrotools')//
+      
+      //var mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))//
+      
+      if (satelite == 'S1'){
+        imagem = rawRadar2db(imagem)
+        imagem = imagem.addBands(ee.Image(imagem.select('VV').divide(imagem.select('VH'))).select([0],['VV_VH']));
+        var geoImagem = imagem.geometry()//.buffer(-5500)
+        imagem = imagem.clip(geoImagem)
+      }
+      
+      if (mask_cloud){
+      
+        var mascara_nuvem;
+  
+        if (filtro_nuvem[satelite]) {
+    
+            if (satelite == 'S2' || satelite == 'S3'){
+              mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))
+    
+            } else {
+              mascara_nuvem = imagem.expression(filtro_nuvem[satelite])
+            }
+    
+          imagem = imagem.mask(mascara_nuvem);
+        }
+      }
+      
+      if (mascara) {
+        imagem = imagem.select(bandasSelecionadas).clip(mascara)//
+      }
+      
+      imagem = addLayer(imagem,satelite,realce,nome).select(bandasSelecionadas)
+      
+      if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+        imagem = imagem.multiply(10000).toInt16();
+      }
+      
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'MOD16' && satelite !== 'CHIRPS' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+      }
+      
+      Export.image.toDrive({
+        image: imagem,
+        description: nome,
+        folder: googleDriveDir,
+        fileNamePrefix: nome,
+        region:mascara.geometry(),
+        //region:faz_agrotools.geometry(),
+        scale: escala[satelite], // Escala parametro
+        maxPixels: 1E13
+      });
+      
+    })
+    if (lat && long) {
+      Map.addLayer(coord_ponto,{},'Coordenada');
+    }
+  })
+}
+
+var recuperarImagens_plus_cube = function(satelite, realce, data_inicial, data_final, googleDriveDir, novasBandas, lat, long,mascara,banda,nome_sufixo) {
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+  
+  var coord_ponto
+  if (lat && long) {
+    coord_ponto = ee.Geometry.Point(long,lat)
+    Map.centerObject(coord_ponto, 11);
+  }else if (mascara){
+    coord_ponto = mascara
+    Map.centerObject(mascara);
+  } else {
+    coord_ponto = ee.Geometry(Map.getCenter(true))
+  }
+  
+  var colecaoImage;
+
+  if (satelite !== 'ALOS' && satelite !== 'SRTM', satelite !== 'DRONE'){
+    colecaoImage= ee.ImageCollection(colecaoId)
+    .filterBounds(coord_ponto)
+    .filterDate(data_inicial, data_final)
+    .select(bandasSelecionadas)
+    
+  }
+  else if (satelite === 'DRONE') {
+    colecaoImage= ee.Image(colecaoId.mosaico).addBands(ee.Image(colecaoId.dsm).rename('elevation'))
+  }
+  else{
+    colecaoImage= ee.Image(colecaoId)
+    .select(bandasSelecionadas)
+  }
+  
+  var lista;
+  var listaDeImages;
+  
+  if (satelite !== 'ALOS' && satelite !== 'SRTM' && satelite !== 'S1' && satelite !== 'DRONE'){
+  listaDeImages = colecaoImage.iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else if (satelite === 'S1') {
+  listaDeImages = colecaoImage.filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"]).iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else {
+   lista = ee.List([])
+   var satNome;
+  
+   if(satelite==='ALOS'){satNome = 'ALOS_PALSAR_30M'}else if (satelite==='SRTM'){satNome = 'SRTM_30M'}
+  
+   if (satelite!=='DRONE'){
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': satNome,
+        'id': ee.String(colecaoId)
+      }))
+   } else {
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': 'DRONE_LAPIG',
+        'id': colecaoImage
+      }))
+    }
+  }
+
+  var novaLista = []
+  
+  listaDeImages.evaluate(function(listaDeImages) {
+    listaDeImages.forEach(function(img) {
+      var imagem;
+
+      if (satelite!=='DRONE'){ imagem = ee.Image(img.id)}
+      else {imagem = colecaoImage}
+      
+      var nome = img.nome
+      
+      if(satelite==='MOD13'){nome = 'MOD13Q1_'+nome}
+      else if(satelite==='MOD11'){nome = 'MOD11A2_'+nome}
+      else if(satelite==='MOD16'){nome = 'MOD16A2_'+nome}
+      else if(satelite==='CHIRPS'){nome = 'CHIRPS_'+nome}
+      
+      if (satelite == 'S1'){
+        imagem = rawRadar2db(imagem)
+        imagem = imagem.addBands(ee.Image(imagem.select('VV').divide(imagem.select('VH'))).select([0],['VV_VH']));
+        var geoImagem = imagem.geometry()//.buffer(-5500)
+        imagem = imagem.clip(geoImagem)
+      }
+      var mascara_nuvem;
+    
+      if (filtro_nuvem[satelite]) {
+  
+          if (satelite == 'S2' || satelite == 'S3'){
+            mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))
+  
+          } else {
+            mascara_nuvem = imagem.expression(filtro_nuvem[satelite])
+          }
+  
+        imagem = imagem.mask(mascara_nuvem);
+      }
+      
+      if (mascara) {
+        imagem = imagem.select(bandasSelecionadas).clip(mascara)//
+      }
+      
+      imagem = addLayer(imagem,satelite,realce,nome).select(bandasSelecionadas)
+      
+      if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+        imagem = imagem.multiply(10000).toInt16();
+      }
+      
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'MOD16' && satelite !== 'CHIRPS' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+      }
+      novaLista.push(imagem.select(banda))
+
+    })
+
+    Export.image.toDrive({
+      image:ee.Image(novaLista),
+      description:nome_sufixo + '_' + banda,
+      folder: googleDriveDir,
+      fileNamePrefix: nome_sufixo + '_' + banda,
+      region:mascara.geometry(),
+      //region:faz_agrotools.geometry(),
+      scale: escala[satelite], // Escala parametro
+      maxPixels: 1E13
+    });
+
+    if (lat && long) {
+      Map.addLayer(coord_ponto,{},'Coordenada');
+    }
+  })
+}
+
+var recuperarImagens_plus_indice = function(satelite, realce, data_inicial, data_final, googleDriveDir, novasBandas, lat, long,mascara,expressao) {
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+  
+  var coord_ponto
+  if (lat && long) {
+    coord_ponto = ee.Geometry.Point(long,lat)
+    Map.centerObject(coord_ponto, 11);
+  }else if (mascara){
+    coord_ponto = mascara
+    Map.centerObject(mascara);
+  } else {
+    coord_ponto = ee.Geometry(Map.getCenter(true))
+  }
+  
+  var colecaoImage;
+
+  if (satelite !== 'ALOS' && satelite !== 'SRTM', satelite !== 'DRONE'){
+    colecaoImage= ee.ImageCollection(colecaoId)
+    .filterBounds(coord_ponto)
+    .filterDate(data_inicial, data_final)
+    .select(bandasSelecionadas)
+    
+  }
+  else if (satelite === 'DRONE') {
+    colecaoImage= ee.Image(colecaoId.mosaico).addBands(ee.Image(colecaoId.dsm).rename('elevation'))
+  }
+  else{
+    colecaoImage= ee.Image(colecaoId)
+    .select(bandasSelecionadas)
+  }
+  
+  var lista;
+  var listaDeImages;
+  
+  if (satelite !== 'ALOS' && satelite !== 'SRTM' && satelite !== 'S1' && satelite !== 'DRONE'){
+  listaDeImages = colecaoImage.iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else if (satelite === 'S1') {
+  listaDeImages = colecaoImage.filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"]).iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else {
+   lista = ee.List([])
+   var satNome;
+  
+   if(satelite==='ALOS'){satNome = 'ALOS_PALSAR_30M'}else if (satelite==='SRTM'){satNome = 'SRTM_30M'}
+  
+   if (satelite!=='DRONE'){
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': satNome,
+        'id': ee.String(colecaoId)
+      }))
+   } else {
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': 'DRONE_LAPIG',
+        'id': colecaoImage
+      }))
+    }
+  }
+  
+  listaDeImages.evaluate(function(listaDeImages) {
+    listaDeImages.forEach(function(img) {
+      var imagem;
+
+      if (satelite!=='DRONE'){ imagem = ee.Image(img.id)}
+      else {imagem = colecaoImage}
+      
+      var nome = img.nome
+      
+      if(satelite==='MOD13'){nome = 'MOD13Q1_'+nome}
+      else if(satelite==='MOD11'){nome = 'MOD11A2_'+nome}
+      else if(satelite==='MOD16'){nome = 'MOD16A2_'+nome}
+      else if(satelite==='TRMM'){nome = 'TRMM_'+nome}
+      else if(satelite==='CHIRPS'){nome = 'CHIRPS_'+nome}
+      
+      //var faz_agrotools = ee.FeatureCollection('users/vieiramesquita/agrotools')//
+      
+      //var mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))//
+      
+      if (satelite == 'S1'){
+        imagem = rawRadar2db(imagem)
+        imagem = imagem.addBands(ee.Image(imagem.select('VV').divide(imagem.select('VH'))).select([0],['VV_VH']));
+        var geoImagem = imagem.geometry()//.buffer(-5500)
+        imagem = imagem.clip(geoImagem)
+      }
+      
+      var mascara_nuvem;
+
+      if (filtro_nuvem[satelite]) {
+  
+          if (satelite == 'S2' || satelite == 'S3'){
+            mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))
+  
+          } else {
+            mascara_nuvem = imagem.expression(filtro_nuvem[satelite])
+          }
+  
+        imagem = imagem.mask(mascara_nuvem);
+      }
+      
+      if (mascara) {
+        imagem = imagem.select(bandasSelecionadas).clip(mascara)//
+      }
+      
+      imagem = addLayer(imagem,satelite,realce,nome);
+      
+      if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+        imagem = imagem.multiply(10000).toInt16();
+      }
+      
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'MOD16' && satelite !== 'CHIRPS' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+      }
+
+      imagem = imagem.expression(expressao,mapa_bandas(satelite,imagem));
+      
+      Export.image.toDrive({
+        image: imagem,
+        description: nome,
+        folder: googleDriveDir,
+        fileNamePrefix: nome,
+        region:mascara.geometry(),
+        //region:faz_agrotools.geometry(),
+        scale: escala[satelite], // Escala parametro
+        maxPixels: 1E13
+      });
+      
+    })
+    if (lat && long) {
+      Map.addLayer(coord_ponto,{},'Coordenada');
+    }
+  })
+}
+
+var recuperarImagens_plus_cube_indice = function(satelite, realce, data_inicial, data_final, googleDriveDir, novasBandas, lat, long,mascara,expressao,nome_sufixo) {
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+  
+  var coord_ponto
+  if (lat && long) {
+    coord_ponto = ee.Geometry.Point(long,lat)
+    Map.centerObject(coord_ponto, 11);
+  }else if (mascara){
+    coord_ponto = mascara
+    Map.centerObject(mascara);
+  } else {
+    coord_ponto = ee.Geometry(Map.getCenter(true))
+  }
+  
+  var colecaoImage;
+
+  if (satelite !== 'ALOS' && satelite !== 'SRTM', satelite !== 'DRONE'){
+    colecaoImage= ee.ImageCollection(colecaoId)
+    .filterBounds(coord_ponto)
+    .filterDate(data_inicial, data_final)
+    .select(bandasSelecionadas)
+    
+  }
+  else if (satelite === 'DRONE') {
+    colecaoImage= ee.Image(colecaoId.mosaico).addBands(ee.Image(colecaoId.dsm).rename('elevation'))
+  }
+  else{
+    colecaoImage= ee.Image(colecaoId)
+    .select(bandasSelecionadas)
+  }
+  
+  var lista;
+  var listaDeImages;
+  
+  if (satelite !== 'ALOS' && satelite !== 'SRTM' && satelite !== 'S1' && satelite !== 'DRONE'){
+  listaDeImages = colecaoImage.iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else if (satelite === 'S1') {
+  listaDeImages = colecaoImage.filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"]).iterate(function(img, lista) {
+    return ee.List(lista).add(ee.Dictionary({
+      'nome': img.get('system:index'),
+      'id': ee.String(colecaoId).cat(ee.String('/')).cat(ee.String(img.id()))
+    }))
+  }, ee.List([]))
+  } else {
+   lista = ee.List([])
+   var satNome;
+  
+   if(satelite==='ALOS'){satNome = 'ALOS_PALSAR_30M'}else if (satelite==='SRTM'){satNome = 'SRTM_30M'}
+  
+   if (satelite!=='DRONE'){
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': satNome,
+        'id': ee.String(colecaoId)
+      }))
+   } else {
+    listaDeImages = lista.add(ee.Dictionary({
+        'nome': 'DRONE_LAPIG',
+        'id': colecaoImage
+      }))
+    }
+  }
+
+  var novaLista = []
+  
+  listaDeImages.evaluate(function(listaDeImages) {
+    listaDeImages.forEach(function(img) {
+      var imagem;
+
+      if (satelite!=='DRONE'){ imagem = ee.Image(img.id)}
+      else {imagem = colecaoImage}
+      
+      var nome = img.nome
+      
+      if(satelite==='MOD13'){nome = 'MOD13Q1_'+nome}
+      else if(satelite==='MOD11'){nome = 'MOD11A2_'+nome}
+      else if(satelite==='MOD16'){nome = 'MOD16A2_'+nome}
+      else if(satelite==='TRMM'){nome = 'TRMM_'+nome}
+      else if(satelite==='CHIRPS'){nome = 'CHIRPS_'+nome}
+      
+      if (satelite == 'S1'){
+        imagem = rawRadar2db(imagem)
+        imagem = imagem.addBands(ee.Image(imagem.select('VV').divide(imagem.select('VH'))).select([0],['VV_VH']));
+        var geoImagem = imagem.geometry()//.buffer(-5500)
+        imagem = imagem.clip(geoImagem)
+      }
+      
+      var mascara_nuvem;
+
+      if (filtro_nuvem[satelite]) {
+  
+          if (satelite == 'S2' || satelite == 'S3'){
+            mascara_nuvem = imagem.expression(filtro_nuvem[satelite]).add(imagem.lte(0))
+  
+          } else {
+            mascara_nuvem = imagem.expression(filtro_nuvem[satelite])
+          }
+  
+        imagem = imagem.mask(mascara_nuvem);
+      }
+
+      
+      if (mascara) {
+        imagem = imagem.select(bandasSelecionadas).clip(mascara);
+      }
+      
+      imagem = addLayer(imagem,satelite,realce,nome);
+      
+      if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+        imagem = imagem.multiply(10000).toInt16();
+      }
+      
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'MOD16' && satelite !== 'CHIRPS' && satelite !== 'S1'){
+        imagem = imagem.toInt16();
+      }
+
+      imagem = imagem.expression(expressao,mapa_bandas(satelite,imagem));
+
+      novaLista.push(imagem);
+
+    });
+
+    Export.image.toDrive({
+      image:ee.Image(novaLista),
+      description:nome_sufixo,
+      folder: googleDriveDir,
+      fileNamePrefix: nome_sufixo,
+      region:mascara.geometry(),
+      //region:faz_agrotools.geometry(),
+      scale: escala[satelite], // Escala parametro
+      maxPixels: 1E13
+    });
+
+    if (lat && long) {
+      Map.addLayer(coord_ponto,{},'Coordenada');
+    }
+  });
+};
+
+var aplicarRedutor = function(satelite, realce, data_inicial, data_final, googleDriveDir, redutor,nome_sufixo, novasBandas, lat, long,label) {
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  var coord_ponto
+  if (lat && long) {
+    coord_ponto = ee.Geometry.Point(long,lat)
+    Map.centerObject(coord_ponto, 11);
+  }else {
+    coord_ponto = ee.Geometry(Map.getCenter(true))
+  }
+  
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+    
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId)
+  }
+
+  var imagem = colecaoImage
+    .filterBounds(coord_ponto)
+    .filterDate(data_inicial, data_final)
+    .map(function(img){
+      if (filtro_nuvem[satelite]) {
+        var mascara_nuvem;
+        if (satelite == 'S2' || satelite == 'S3'){
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0))
+          return img.mask(mascara_nuvem).select(bandasSelecionadas)
+        } else {
+          mascara_nuvem = img.expression(filtro_nuvem[satelite])
+          return img.mask(mascara_nuvem).select(bandasSelecionadas)
+        }
+      } else {
+        return img.select(bandasSelecionadas)
+        }
+      })
+    .reduce(redutor)
+    .rename(bandasSelecionadas)
+    
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'MOD16' && satelite !== 'L5_TOA' && satelite !== 'L7_TOA' && satelite !== 'L8_TOA' && satelite !== 'CHIRPS' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+      }
+ 
+  imagem = ee.Image(imagem)
+  var nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,null,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,null)}
+  
+  if (lat && long) {
+    Map.addLayer(coord_ponto,{},'Coordenada');
+  }
+  
+  
+  if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+    imagem = imagem.multiply(10000).toInt16();
+  }
+
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region: colecaoImage.filterBounds(coord_ponto).geometry().dissolve(),
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+    })
+}
+
+var gerarMosaicos = function(satelite, realce, data_inicial, data_final, googleDriveDir, mascara, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(mascara);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+      .map(function(img){
+        img = rawRadar2db(img)
+        img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+        var geoImagem = img.geometry()//.buffer(-5500)
+        return img.clip(geoImagem)
+      })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    imagem = colecaoImage
+      .select(bandasSelecionadas)
+      .filterBounds(mascara)
+      .filterDate(data_inicial, data_final)
+      .sort(cobertura_nuvem[satelite],false)
+      .mosaic();
+  
+      if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'CHIRPS' && satelite !== 'MOD16' && satelite !== 'L5_TOA' && satelite !== 'L7_TOA' && satelite !== 'L8_TOA' && satelite !== 'S1'){
+        imagem = imagem.toInt16();
+      }
+  
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(mascara);
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,null,label);
+  }else{imagem = addLayer(imagem,satelite,realce,nome,null)}
+  
+  if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+    imagem = imagem.multiply(10000).toInt16();
+  }
+  
+  var recorte = ee.Geometry(mascara.geometry()).bounds()
+  
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region: recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+ 
+ return ee.Image(imagem) 
+}
+
+var gerarMosaicosSintese = function(satelite, realce, data_inicial, data_final, googleDriveDir, mascara, redutor, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(mascara);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId)
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId)
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    imagem = colecaoImage
+      .filterBounds(mascara)
+      .filterDate(data_inicial, data_final)
+      .map(function(img){
+        if (filtro_nuvem[satelite]) {
+          var mascara_nuvem;
+          if (satelite == 'S2' || satelite == 'S3'){
+            mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0))
+            return img.mask(mascara_nuvem).select(bandasSelecionadas)
+          } else {
+            mascara_nuvem = img.expression(filtro_nuvem[satelite])
+            return img.mask(mascara_nuvem).select(bandasSelecionadas)
+          }
+        } else {
+          return img.select(bandasSelecionadas)
+          }
+        })
+      .reduce(redutor)
+      .rename(bandasSelecionadas)
+      //.mosaic()
+      
+    if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'CHIRPS' && satelite !== 'MOD16' && satelite !== 'L5_TOA' && satelite !== 'L7_TOA' && satelite !== 'L8_TOA' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+    }
+
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas)
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(mascara)
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo
+  } else {
+    nome = satelite + '_' + nome_sufixo
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,null,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,null)}
+  
+  if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+    imagem = imagem.multiply(10000).toInt16()
+  }
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(mascara.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+  
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region: recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  return ee.Image(imagem)
+}
+
+var gerarMosaicosIndices = function(satelite, realce, data_inicial, data_final, googleDriveDir, mascara, expressao, indice_realce, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(mascara);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    imagem = colecaoImage
+      .select(bandasSelecionadas)
+      .filterBounds(mascara)
+      .filterDate(data_inicial, data_final)
+      .sort(cobertura_nuvem[satelite],false)
+      .mosaic()
+  
+    imagem = imagem.expression(expressao,mapa_bandas(satelite,imagem))
+  
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(mascara);
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,indice_realce,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,indice_realce)}
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(mascara.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+  
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region: recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  return ee.Image(imagem)
+};
+
+var gerarMosaicosSintesePerc = function(satelite, realce, data_inicial, data_final, googleDriveDir, mascara, redutor,percentile,expressao_perc,perc_style, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(mascara);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId)
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId)
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    imagem = colecaoImage
+      .filterBounds(mascara)
+      .filterDate(data_inicial, data_final)
+
+    var spectralFeatures = function(image) {
+      var mascara_nuvem;
+      if (satelite == 'S2' || satelite == 'S3'){
+        mascara_nuvem = image.expression(filtro_nuvem[satelite]).add(image.lte(0));
+        image =  image.mask(mascara_nuvem);
+      } else if (satelite === 'S1'){
+        colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+        .map(function(img){
+          img = rawRadar2db(img)
+          img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+          var geoImagem = img.geometry()//.buffer(-5500)
+          return img.clip(geoImagem)
+        })
+      } else {
+        mascara_nuvem = image.expression(filtro_nuvem[satelite]);
+        image = image.mask(mascara_nuvem);
+      }
+      return image.expression(expressao_perc,mapa_bandas(satelite,image));
+    };
+
+    var PercThreshold= colecaoImage.map(spectralFeatures).reduce(ee.Reducer.percentile([percentile]))
+
+    imagem = imagem.map(function(img){
+      if (filtro_nuvem[satelite]) {
+        var mascara_nuvem;
+        if (satelite == 'S2' || satelite == 'S3'){
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0))
+          img = img.mask(mascara_nuvem).select(bandasSelecionadas)
+        } else {
+          mascara_nuvem = img.expression(filtro_nuvem[satelite])
+          img = img.mask(mascara_nuvem).select(bandasSelecionadas)
+        }
+
+        var imgMask = img.expression(expressao_perc,mapa_bandas(satelite,img))
+           
+        if (perc_style == 1){
+            img = img.mask(imgMask.lt(PercThreshold))
+        } else if (perc_style == 2){
+          img = img.mask(imgMask.gt(PercThreshold))
+        } else if (perc_style == 3){
+          img = img.mask(imgMask.lte(PercThreshold))
+        } else if (perc_style == 4){
+          img = img.mask(imgMask.gte(PercThreshold))
+        } else {
+          img = img
+        }
+
+        return img;
+
+      } else {
+        return img.select(bandasSelecionadas)
+        }
+      })
+      .reduce(redutor)
+      .rename(bandasSelecionadas)
+      //.mosaic()
+      
+    if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'CHIRPS' && satelite !== 'MOD16' && satelite !== 'L5_TOA' && satelite !== 'L7_TOA' && satelite !== 'L8_TOA' && satelite !== 'S1'){
+        imagem = imagem.toInt16()
+    }
+
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas)
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(mascara)
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo
+  } else {
+    nome = satelite + '_' + nome_sufixo
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,null,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,null)}
+  
+  if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+    imagem = imagem.multiply(10000).toInt16()
+  }
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(mascara.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+  
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region: recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  return ee.Image(imagem)
+}
+
+var gerarMosaicosIndicesSintese = function(satelite, realce, data_inicial, data_final, googleDriveDir, mascara,redutor, expressao, indice_realce, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(mascara);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+  imagem = colecaoImage
+    .filterBounds(mascara)
+    .filterDate(data_inicial, data_final)
+    .map(function(img){
+      if (filtro_nuvem[satelite]) {
+        var mascara_nuvem;
+        if (satelite == 'S2' || satelite == 'S3'){
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0));
+          img =  img.mask(mascara_nuvem);
+          return img.expression(expressao,mapa_bandas(satelite,img));
+        } else {
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]);
+          img = img.mask(mascara_nuvem);
+          return img.expression(expressao,mapa_bandas(satelite,img));
+        }
+      } else {
+        return img.select(bandasSelecionadas);
+        }
+      })
+    .reduce(redutor);
+
+  
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(mascara);
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,indice_realce,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,indice_realce)}
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(mascara.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region:recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  return ee.Image(imagem)
+};
+
+var gerarMosaicosIndicesSintesePerc = function(satelite, realce, data_inicial, data_final, googleDriveDir, mascara,redutor,percentile, expressao,expressao_perc, perc_style,indice_realce, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(mascara);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+  imagem = colecaoImage
+    .filterBounds(mascara)
+    .filterDate(data_inicial, data_final)
+    
+    var spectralFeatures = function(image) {
+      var mascara_nuvem;
+      if (satelite == 'S2' || satelite == 'S3'){
+        mascara_nuvem = image.expression(filtro_nuvem[satelite]).add(image.lte(0));
+        image =  image.mask(mascara_nuvem);
+      } else {
+        mascara_nuvem = image.expression(filtro_nuvem[satelite]);
+        image = image.mask(mascara_nuvem);
+      }
+      return image.expression(expressao_perc,mapa_bandas(satelite,image));
+    };
+
+    var PercThreshold= colecaoImage.map(spectralFeatures).reduce(ee.Reducer.percentile([percentile]))
+    
+    imagem = imagem.map(function(img){
+      if (filtro_nuvem[satelite]) {
+        var mascara_nuvem;
+        if (satelite == 'S2' || satelite == 'S3'){
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0));
+          img =  img.mask(mascara_nuvem);
+        } else {
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]);
+          img = img.mask(mascara_nuvem);
+        }
+        
+        var imgMask = img.expression(expressao_perc,mapa_bandas(satelite,img))
+           
+        img = img.expression(expressao,mapa_bandas(satelite,img))
+
+        if (perc_style == 1){
+            img = img.mask(imgMask.lt(PercThreshold))
+        } else if (perc_style == 2){
+          img = img.mask(imgMask.gt(PercThreshold))
+        } else if (perc_style == 3){
+          img = img.mask(imgMask.lte(PercThreshold))
+        } else if (perc_style == 4){
+          img = img.mask(imgMask.gte(PercThreshold))
+        } else {
+          img = img
+        }
+  
+        return img;
+        
+      } else {
+        return img.select(bandasSelecionadas);
+        }
+      })
+    .reduce(redutor);
+
+  
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(mascara);
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,indice_realce,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,indice_realce)}
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(mascara.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region:recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  return ee.Image(imagem)
+};
+
+var gerarEstatisticaZona = function(satelite, realce, data_inicial, data_final, googleDriveDir, regiao, redutor, estatistica, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(regiao);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    imagem = colecaoImage
+      .filterBounds(regiao)
+      .filterDate(data_inicial, data_final)
+      .map(function(img){
+        if (filtro_nuvem[satelite]) {
+          var mascara_nuvem;
+          if (satelite == 'S2' || satelite == 'S3'){
+            mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0));
+            return img.mask(mascara_nuvem).select(bandasSelecionadas);
+          } else {
+            mascara_nuvem = img.expression(filtro_nuvem[satelite]);
+            return img.mask(mascara_nuvem).select(bandasSelecionadas);
+          }
+        } else {
+          return img.select(bandasSelecionadas);
+          }
+        })
+      .reduce(redutor)
+      .rename(bandasSelecionadas);
+    
+    if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'CHIRPS' && satelite !== 'MOD16' && satelite !== 'S1'){
+      imagem = imagem.toInt16()
+    }
+  
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(regiao);
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,null,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,null)}
+  
+  var estatisticas = imagem.reduceRegions(regiao, estatistica, escala[satelite]);
+  
+  if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+    imagem = imagem.multiply(10000).toInt16();
+  }
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(regiao.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+  
+  Export.image.toDrive({
+    image: imagem.toInt16(),
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region: recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  Export.table.toDrive({
+    collection: estatisticas,
+    description: nome + '_stats',
+    folder: googleDriveDir,
+    fileNamePrefix: nome + '_stats',
+    fileFormat: 'CSV'
+  });
+    
+};
+
+var gerarEstatisticaZonaIndices = function(satelite, realce, data_inicial, data_final, googleDriveDir, regiao, redutor, estatistica, expressao,
+indice_realce, nome_sufixo,clip, novasBandas,label){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+
+  Map.centerObject(regiao);
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+  imagem = colecaoImage
+    .filterBounds(regiao)
+    .filterDate(data_inicial, data_final)
+    .map(function(img){
+      if (filtro_nuvem[satelite]) {
+        var mascara_nuvem;
+        if (satelite == 'S2' || satelite == 'S3'){
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0));
+          img =  img.mask(mascara_nuvem);
+          return img.expression(expressao,mapa_bandas(satelite,img));
+        } else {
+          mascara_nuvem = img.expression(filtro_nuvem[satelite]);
+          img = img.mask(mascara_nuvem);
+          return img.expression(expressao,mapa_bandas(satelite,img));
+        }
+      } else {
+        return img.select(bandasSelecionadas);
+        }
+      })
+    .reduce(redutor);
+  
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.clip(regiao);
+  }
+  
+  var nome;
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if(label){imagem = addLayer(imagem,satelite,realce,nome,indice_realce,label)
+  }else{imagem = addLayer(imagem,satelite,realce,nome,indice_realce)}
+  
+  if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+    imagem = imagem.multiply(10000).toInt16();
+  }
+  
+  var estatisticas = imagem.reduceRegions(regiao, estatistica, escala[satelite]);
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(regiao.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+  
+  Export.image.toDrive({
+    image: imagem.toInt16(),
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region:recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  Export.table.toDrive({
+    collection: estatisticas,
+    description: nome + '_stats',
+    folder: googleDriveDir,
+    fileNamePrefix: nome + '_stats',
+    fileFormat: 'CSV'
+  });
+};
+
+var gerarEstatisticaPastagem = function(satelite, realce, data_inicial, data_final, googleDriveDir, regiao, redutor, estatistica, nome_sufixo, clip,expressao,
+indice_realce,AssetMascara, novasBandas){
+  
+  var colecaoId = series[satelite];
+  var bandasSelecionadas;
+  
+  var data_mapa = function(data) {
+     if (parseInt(data.slice(0,4)) < 1985){
+       return '1985';
+     } else if (parseInt(data.slice(0,4)) > 2017) {
+       return '2017';
+     }else{ return data.slice(0,4) }
+  }
+  
+  if (novasBandas){bandasSelecionadas = novasBandas } else{bandasSelecionadas = bandas[satelite]}
+  
+  if (regiao){
+    Map.centerObject(regiao);  
+  } else {
+    regiao = AssetMascara.geometry();
+    Map.centerObject(AssetMascara);
+  }
+
+  var colecaoImage;
+  
+  if (satelite === 'S1'){
+    colecaoImage = ee.ImageCollection(colecaoId).filterMetadata('transmitterReceiverPolarisation','equals', ["VV","VH"])
+    .map(function(img){
+      img = rawRadar2db(img)
+      img = img.addBands(ee.Image(img.select('VV').divide(img.select('VH'))).select([0],['VV_VH']));
+      var geoImagem = img.geometry()//.buffer(-5500)
+      return img.clip(geoImagem)
+    })
+  } else if (satelite === 'SRTM' || satelite === 'ALOS'){
+    colecaoImage= ee.Image(colecaoId);
+  } else {
+    colecaoImage= ee.ImageCollection(colecaoId);
+  }
+  
+  var imagem;
+
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+   if (expressao){
+    imagem = colecaoImage
+     .filterBounds(regiao)
+     .filterDate(data_inicial, data_final)
+     .map(function(img){
+       if (filtro_nuvem[satelite]) {
+         var mascara_nuvem;
+         if (satelite == 'S2' || satelite == 'S3'){
+           mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0));
+           img =  img.mask(mascara_nuvem);
+           return img.expression(expressao,mapa_bandas(satelite,img));
+         } else {
+           mascara_nuvem = img.expression(filtro_nuvem[satelite]);
+           img = img.mask(mascara_nuvem);
+           return img.expression(expressao,mapa_bandas(satelite,img));
+         }
+       } else {
+         return img.select(bandasSelecionadas);
+         }
+       })
+     .reduce(redutor);
+   } else {
+    imagem = colecaoImage
+      .filterBounds(regiao)
+      .filterDate(data_inicial, data_final)
+      .map(function(img){
+        if (filtro_nuvem[satelite]) {
+          var mascara_nuvem;
+          if (satelite == 'S2' || satelite == 'S3'){
+            mascara_nuvem = img.expression(filtro_nuvem[satelite]).add(img.lte(0));
+            return img.mask(mascara_nuvem).select(bandasSelecionadas);
+          } else {
+            mascara_nuvem = img.expression(filtro_nuvem[satelite]);
+            return img.mask(mascara_nuvem).select(bandasSelecionadas);
+          }
+        } else {
+          return img.select(bandasSelecionadas);
+          }
+        })
+      .reduce(redutor)
+      .rename(bandasSelecionadas);
+      
+    if(satelite === 'L5_TOA' || satelite === 'L7_TOA' || satelite === 'L8_TOA'){
+      imagem = imagem.multiply(10000).toInt16();
+    }
+    if(satelite !== 'MOD11' && satelite !== 'GPM' && satelite !== 'TRMM' && satelite !== 'CHIRPS' && satelite !== 'MOD16' && satelite !== 'S1'){
+      imagem = imagem.toInt16()
+    }
+      
+   }
+  } else {
+    imagem = colecaoImage.select(bandasSelecionadas);
+  }
+  
+  if (clip) {
+    imagem = imagem.mask(AssetMascara.eq(15));
+    imagem = imagem.clip(regiao)
+    Map.addLayer(AssetMascara.clip(regiao),{palette:'#f9e427'},'LAPIG Pastagem - ' + data_mapa)
+  } else {
+    imagem = imagem.clip(regiao)
+  }
+  
+  var nome;
+  
+  if (satelite !== 'SRTM' && satelite !== 'ALOS'){
+    nome = satelite + '_' + data_inicial + '_' + data_final + '_' + nome_sufixo;
+  } else {
+    nome = satelite + '_' + nome_sufixo;
+  }
+  
+  if (indice_realce && expressao){
+    
+    imagem = addLayer(imagem, satelite, realce, nome,indice_realce)}
+  else{
+    imagem = addLayer(imagem, satelite, realce, nome)}
+  
+  var estatisticas = imagem.reduceRegions(regiao, estatistica, escala[satelite]);
+  
+  var recorte;
+  
+  if(clip){recorte = ee.Geometry(regiao.geometry()).bounds()}
+  else{recorte = colecaoImage.filterBounds(Map.getCenter()).geometry().dissolve()}
+  
+  Export.image.toDrive({
+    image: imagem,
+    description: nome,
+    folder: googleDriveDir,
+    fileNamePrefix: nome,
+    region:recorte,
+    scale: escala[satelite], // Escala parametro
+    maxPixels: 1E13
+  });
+  
+  Export.table.toDrive({
+    collection: estatisticas,
+    description: nome + '_stats',
+    folder: googleDriveDir,
+    fileNamePrefix: nome + '_stats',
+    fileFormat: 'CSV'
+  });
+  
+};
+
+var gerarAmostras = function(satelite, featureSpace, regioes) {
+ 
+  /* 
+   * The seed of random points. If you change it, 
+   * you will get a different point dataset 
+   */ 
+  var seed = 1989
+  
+  var mergedSamples = null
+
+  /* Do the sampling for each FeatureCollection */
+  regioes.forEach(function(regiao) {
+    
+    var featureCollection = regiao['featureCollection']
+    var nPontos = regiao['nPontos']
+    var regiaoId = regiao['id']
+    var cor = regiao['cor']
+    var propriedadeClasse = regiao['propriedadeClasse']
+    
+    /* Rasterizing the FeatureCollection */
+    var referenceMap = featureCollection.reduceToImage({
+        properties: [ propriedadeClasse ],
+        reducer: ee.Reducer.first()
+    }).rename(['class']);
+    
+
+    /* Uniffing all geometries of FeatureCollection */
+    var samplingGeometries = featureCollection.iterate(function(feature, geometry) {
+      return feature.geometry().union(geometry)
+    })
+    
+    /* Generating random points inside the FeatureCollection geometries */
+    var randomPoints = ee.FeatureCollection.randomPoints(samplingGeometries, nPontos, seed)
+    
+    /* Adding the generated points in the map */
+    Map.addLayer(randomPoints, {cor: cor}, regiaoId + ' amostras', false);
+
+    /* Retriving pixel values of the feature space considering the generated points */
+    var samples = featureSpace.addBands(referenceMap).sampleRegions(randomPoints, null, escala[satelite])
+
+    if (mergedSamples === null)
+      mergedSamples = samples
+    else
+      mergedSamples = mergedSamples.merge(samples)
+
+  })
+
+  return mergedSamples
+}
+
+var classificarComRandomForest = function(satelite, featureSpace, regioes, nArvores, diretorioDestino, nomeResultado, mascara) {
+  
+  var amostras = gerarAmostras(satelite, featureSpace, regioes)
+
+  var classifier = ee.Classifier.randomForest(nArvores)
+  classifier = classifier.train(amostras, 'class', featureSpace.bandNames());
+
+  var classNumber = 0
+  var palette = []
+  
+  /* Producing the visualization params of result */
+  regioes.forEach(function(regiao) {
+    palette.push(regiao['cor'])
+    classNumber += 1
+  })
+
+  palette = palette.join(',')
+  var vizParams = { min:1, max:classNumber, palette: palette }
+
+  /* Predicting the feature space image */
+  var result = featureSpace.classify(classifier)
+
+  /* Adding the classification result in the map */
+  Map.addLayer(result.toByte(), vizParams, nomeResultado)
+  /* 
+   * Exporting the result to Google Drive.
+   * You can export to asset too
+   */
+
+  Export.image.toDrive({
+      image: result,
+      description: nomeResultado,
+      folder: diretorioDestino,
+      scale: escala[satelite],
+      region: ee.Geometry(mascara.geometry()).bounds(),
+      maxPixels: 1e13
+  });
+}
+
+exports = {
+  escala: escala,
+  vetores: vetores,
+  recuperarImagens: recuperarImagens,
+  recuperarImagens_plus:recuperarImagens_plus,
+  aplicarRedutor: aplicarRedutor,
+  gerarMosaicos: gerarMosaicos,
+  gerarMosaicosSintese: gerarMosaicosSintese,
+  gerarMosaicosSintesePerc: gerarMosaicosSintesePerc,
+  gerarMosaicosIndices:gerarMosaicosIndices,
+  gerarMosaicosIndicesSintese: gerarMosaicosIndicesSintese,
+  gerarEstatisticaZona: gerarEstatisticaZona,
+  gerarEstatisticaZonaIndices: gerarEstatisticaZonaIndices,
+  gerarEstatisticaPastagem: gerarEstatisticaPastagem,
+  classificarComRandomForest: classificarComRandomForest,
+  recuperarImagens_plus_cube:recuperarImagens_plus_cube,
+  recuperarImagens_plus_cube_indice:recuperarImagens_plus_cube_indice,
+  recuperarImagens_plus_indice:recuperarImagens_plus_indice,
+  gerarMosaicosIndicesSintesePerc:gerarMosaicosIndicesSintesePerc
+};

@@ -1,0 +1,241 @@
+var utils = require('users/vieiramesquita/LAPIG-GEE:CURSO_GEE_LAPIG/UTILITARIOS')
+
+/************ S06-GERAR-MOSAICOS-INDICES-SINTESE ************
+
+  Para visualizar/exportar dados de seu interesse, 
+  voce pode selecionar dados satelitarios alterando as variaveis:
+  - "satelite", "realce", "data_inicial" e data_final.
+  - "redutor"
+  - expressao
+  - regiao
+  
+************ OPCOES ************
+
+  **** TRMM 3B43 V7 (GLOBAL)
+    var satelite = 'TRMM' 
+    var realce = 'Chuva' 
+    var data_inicial = '1998-01-01'
+    var data_final = '2018-07-28'
+    
+  **** ALOS DEM 30M (GLOBAL)
+    var satelite = 'ALOS' 
+    var realce = 'ALT' 
+    nao necessita de data_inicial e/ou data_final
+  **** SRTM V4 30M (GLOBAL)
+    var satelite = 'SRTM' 
+    var realce = 'ALT' 
+    nao necessita de data_inicial e/ou data_final
+  
+  **** MOD11A2 TEMPERATURA DE SUPERFICIE (GLOBAL)
+    var satelite = 'MOD11' 
+    var realce = 'TEMP' 
+    var data_inicial = '2000-03-05'
+    var data_final = '2018-07-28'  
+  **** MOD13Q1 INDICE DE VEGETACAO (GLOBAL)
+    var satelite = 'MOD13' 
+    var realce = 'NDVI' ou 'EVI' ou 'Agri'
+    var data_inicial = '2000-02-18'
+    var data_final = '2018-07-28'  
+  **** MOD16A2 EVAPOTRANSPIRACAO (GLOBAL)
+    var satelite = 'MOD16' 
+    var realce = 'ET' ou 'PET'
+    var data_inicial = '2000-01-01'
+    var data_final = '2018-07-28' 
+  
+  **** LANDSAT 5
+    var satelite = 'L5_TOA' ou 'L5_SR'
+    var realce = 'Agri' ou 'False' ou 'True'
+    var data_inicial = '1984-03-01'
+    var data_final = 2012-05-05
+  **** LANDSAT 7
+    var satelite = 'L7_TOA' ou 'L7_SR'
+    var realce = 'Agri' ou 'False' ou 'True'
+    var data_inicial = '1999-01-01'
+    var data_final = '2018-07-28' 
+  **** LANDSAT 8
+    var satelite = 'L8_TOA' ou 'L8_SR'
+    var realce = 'Agri' ou 'False' ou 'True'
+    var data_inicial = '2013-04-11'
+    var data_final = '2018-07-28' 
+  
+  **** SENTINEL 1
+    var satelite = 'S1' 
+    var realce = 'SAR' 
+    var data_inicial = '2014-10-03'
+    var data_final = '2018-07-28'
+  **** SENTINEL 2
+    var satelite = 'S2' 
+    var realce = 'Agri' ou 'False' ou 'False20' ou 'True'
+    var data_inicial = '2015-06-23 '
+    var data_final = '2018-07-28'
+  **** SENTINEL 2
+    var satelite = Sentinel 3: 'S3'
+    var realce = 'False' ou 'True'
+    var data_inicial = '2016-10-18'
+    var data_final = '2018-07-28'
+
+************ Mascaras ************
+
+  Neste script voce poderá utilizar mascaras pre-carregadas, informar coordenadas ou desenhar vetores 
+  para recortar seus mosaicos.
+  
+  Exemplos de mascaras pre-carregadas:
+  
+  BHRV (Bacia Hidrografica do Rio Vermelho): utils.vetores.BHRV
+  Brasil: utils.vetores.brasil
+  Biomas: utils.vetores.biomas
+  Estados: utils.vetores.estados
+  Municipios: utils.vetores.municipios
+
+  Veja aqui como filtrar colecoes de dados:
+  https://developers.google.com/earth-engine/feature_collection_filtering
+
+  Veja como fazer o upload de um arquivo Shapefile aqui:
+  http://www.shpescape.com/
+
+************ GLOSSARIO ************
+
+  'TOA': Reflectancia de topo de atmosfera
+  'SR': Reflectancia de superficie
+  'Chuva': Coloracao padrao do dado. e.g. precipitacao em mm/h
+  'ALT': Altitude/Elevacao em metros
+  'TEMP': Temperatura de Superficie (LST)
+  'NDVI': Indice de vegetacao com diferenca normalizada (Nir-Red / Nir+Red)
+  'EVI': Indice de vegetacao melhorado (2.5 * (Nir - Red)/ 1 + Nir + 6*Red + 7.5*Blue)
+  'ET'/'PET': Evapotranspiracao total / Evapotranspiracao potencial total em mm
+  'Agri': Compoiscao colorida utilizada na deteccao de areas agricolas (Swir/Nir/Red)
+  'False': Composicao colorida utilizada para dar enfase a vegetacao (Nir/Swir/Red ou Nir/Red/Green)
+  'False20': Semelhante ao 'False', porém realiza a composição com as bandas de 20m de Sentinel 2
+  'True': Composicao colorida que reproduz as cores "naturais" (Red/Green/Blue)
+  'SAR': Diferenca de eixo de polarizacao (Radar - VV,VH,VH)
+
+  ARI_1 & ARI_2 : Anthocyanin Reflectance Index 
+  CAI : Cellulose Absorption Index
+  CRI1 : Carotenoid Reflectance Index 1
+  EVI_1 : Enhanced Vegetation Index
+  EVI_2 : Enhanced Vegetation Index 2 
+  MSI : Moisture Stress Index
+  NDBI : Normalized Difference Build-up Index
+  NDII : Normalized Difference Infrared Index 
+  NDVI : Normalized Difference Vegetation Index
+  NDWI_1  & NDWI_2 : Normalized Difference Water Index
+  PRI : Photochemical Reflectance Index
+  PSRI : Plant Senescence Reflectance Index 
+  PSSR : Pigment Specific Simple Ratio
+  RGR : Red-Green Ratio
+  RVSI : Red-Edge Vegetation Stress Index
+  SATVI : Soil Adjusted Total Vegetation Index
+  SAVI: Soil Adjusted Vegetation Index
+  LAI: Leaf Area Index (https://goo.gl/2EnggF)
+  SIPI_1 & SIPI_2 : Structure Insensitive Pigment Index 
+  VARI : Visible Atmospherically Resistant Index
+  VIG : Visible Index Green
+
+************************************/
+
+var ARI_1 = "((1 / GREEN) - (1 / REDEDGE2))*1000"
+var ARI_1_REALCE = { min: -0.75, max: 0.5, palette:['#0d46ba','#fffd99','#db1c1c']}
+
+var ARI_2 = "((1 / GREEN) - (1 / RED))*1000"
+var ARI_2_REALCE = { min: -0.75, max: 0.5, palette:['#0d46ba','#fffd99','#db1c1c']}
+
+var CAI = "(SWIR1/SWIR2)"
+var CAI_REALCE = { min: 1, max: 3.15, palette:['#e82c06','#0ef912' ]}
+
+var CRI1 = "(1/BLUE) - (1/GREEN)"
+var CRI1_REALCE = { min: -0.0004, max: 0.00015, palette:['#e82c06','#fcf81e' ]}
+
+var EVI_1 = "(2.5 *((NIR - RED) /(1+ NIR + RED * 6 + 7.5*BLUE)))"
+var EVI_1_REALCE = { min: -0.1, max: 1.25, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var EVI_2 = "(2.5*((NIR - RED)/(NIR+2.4*RED+1)))"
+var EVI_2_REALCE = { min: -0.1, max: 2, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var MSI = "SWIR1/NIR"
+var MSI_REALCE = { min: 0.75, max: 1.75, palette:['#e82c06','#fcf81e' ]}
+
+var NDBI = "(SWIR1- NIR) / (SWIR1 + NIR)"
+var NDBI_REALCE = { min: -0.1, max: 0.25, palette:['#0d46ba','#fffd99' ]}
+
+var NDII = "(NIR - SWIR1) / (NIR + SWIR1)"
+var NDII_REALCE = { min: -0.25, max: 0.5, palette:['#e82c06','#fcf81e','#098aed' ]}
+
+var NDVI = "((NIR - RED) /(NIR + RED))"
+var NDVI_REALCE = { min: 0.1, max: 0.9, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var NDWI_1 = "((NIR - SWIR1) /(NIR + SWIR1))"
+var NDWI_1_REALCE = { min: -0.5, max: 0.5, palette:['#db1c1c','#fffd99','#0d46ba' ]}
+
+var NDWI_2 = "((GREEN - NIR) /(GREEN + NIR))"
+var NDWI_2_REALCE = { min: -0.75, max: 0.25, palette:['#db1c1c','#fffd99','#0d46ba']}
+
+var PRI = "(BLUE - GREEN) / (BLUE + GREEN)"
+var PRI_REALCE = { min: -0.05, max: 0.15, palette:['#098aed','#0be524' ]}
+
+var PSRI = "(RED - GREEN )/(REDEDGE2)"
+var PSRI_REALCE = { min: -0.5, max: 0.75, palette:['#e82c06','#0ef912']}
+
+var PSSR = "NIR/RED"
+var PSSR_REALCE = { min: 0.75, max: 3.5, palette:['#fcf81e','#e82c06']}
+
+var RGR = "RED/GREEN"
+var RGR_REALCE = { min:0.5, max: 1.5, palette:['#0ef912','#e82c06']}
+
+var RVSI = "(((REDEDGE1 + REDEDGE3)/2) - REDEDGE2*0.0001)*0.001"
+var RVSI_REALCE = { min: 0.25, max: 2.25, palette:['#0d46ba' ,'#fffd99','#db1c1c']}
+
+var SATVI = "((SWIR1 - RED)/(SWIR1 + RED + 0.5))*(1*0.5)-(SWIR2/2)*0.0001"
+var SATVI_REALCE = { min: -0.05, max: 0.30, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var SAVI = "(((NIR - RED)*(1+0.5))/(SWIR1 + RED + 0.5))"
+var SAVI_REALCE = { min: -0.05, max: 0.30, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var LAI = "(-1)*log(((0.69 - (((NIR - RED)*(1+0.5))/(SWIR1 + RED + 0.5)))/0.59)/0.91)"
+var LAI_REALCE = { min: -0.05, max: 0.30, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var SIPI_1 = "(NIR - BLUE) / (NIR + REDEDGE2)"
+var SIPI_1_REALCE = { min:0, max: 0.5, palette:['#e82c06','#0ef912']}
+
+var SIPI_2 = "(NIR - BLUE) / (NIR + RED)"
+var SIPI_2_REALCE = { min:0, max: 0.5, palette:['#e82c06','#0ef912']}
+
+var VARI = "(GREEN - RED) / (GREEN + RED - BLUE)"
+var VARI_REALCE = { min:-0.25, max: 0.25, palette:['#0ef912','#e82c06']}
+
+var VIG = "(GREEN - RED) / (GREEN + RED)"
+var VIG_REALCE = { min: -0.25, max: 0.25, palette:['#FFFFFF','#CE7E45','#DF923D','#F1B555','#FCD163','#99B718','#74A901' ,'#66A000','#529400','#3E8601','#207401','#056201','#004C00','#023B01','#012E01','#011D01','#011301']}
+
+var satelite = 'L8_TOA';
+var realce = 'True'
+var data_inicial = '2017-07-01';
+var data_final = '2019-06-30';
+var filtro = ee.Reducer.median()
+
+var percentile = 25
+var expressao_perc = NDVI
+var perc_style = 3 // 1 - lt, 2 - gt, 3 - lte, 4 - gte
+
+var paises = utils.vetores.paises.filter(ee.Filter.eq('Country', 'United States'));
+var brasil = utils.vetores.brasil
+var bioma = utils.vetores.biomas.filter(ee.Filter.eq('NM_BIOMA','PANTANAL'))
+var estado = utils.vetores.estados.filter(ee.Filter.eq('NM_UF','GO'))
+var municipio = utils.vetores.municipios.filter(ee.Filter.eq('CD_GEOCMU','5208707'))
+var bhrv = utils.vetores.BHRV
+
+var mascara = bhrv
+
+var expressao = NDVI
+var expressao_realce = NDVI_REALCE
+
+var nome_sufixo = 'NDVI_CHUVA_MEDIA'
+var bandas = ['']
+var diretorio_destino = 'GOOGLE_GEE_DIR'
+
+utils.gerarMosaicosIndicesSintesePerc(satelite, realce, data_inicial, data_final, diretorio_destino, mascara,filtro,percentile, expressao,
+expressao_perc, perc_style,expressao_realce, 'NDVI_DRY',true)
+
+utils.gerarMosaicosIndicesSintesePerc(satelite, realce, data_inicial, data_final, diretorio_destino, mascara,filtro,percentile, expressao,
+expressao_perc, 4,expressao_realce, 'NDVI_WET',true)
+
+//utils.gerarMosaicosIndicesSintese(satelite, realce, data_inicial, data_final, diretorio_destino, mascara,filtro, 
+//expressao, expressao_realce, nome_sufixo, true)
