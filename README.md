@@ -5,7 +5,7 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento - https://ww
 
 --------------
 
-### Acknowledgments
+### Agradecimentos
 - Iniciativa Mapbiomas
 - Universidade Federal de Goiás
 - Google - Earth Engine
