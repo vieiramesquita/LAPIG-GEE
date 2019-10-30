@@ -1,7 +1,7 @@
 ![Vinícius Mesquita](Logo.png)
 LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento - https://www.lapig.iesa.ufg.br/
 
-# Introdução ao Processamento em nuvem atráves da plataforma Google Earth Engine
+<p align="center"> # Introdução ao Processamento em nuvem atráves da plataforma Google Earth Engine </p>
 
 --------------
 
