@@ -98,16 +98,16 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
   * Gitelson, A., M. Merzlyak, and O. Chivkunova. **Optical Properties and Nondestructive Estimation of Anthocyanin Content in Plant   Leaves**. Photochemistry and Photobiology 71 (2001): 38-45.
   
 * **CAI** : Cellulose Absorption Index - Aplicações:
-  * Nagler, Pamela & Daughtry, Craig & Goward, Samuel. (2000). Plant Litter and Soil Reflectance. Remote Sensing of Environment. 71. 207-215. 10.1016/S0034-4257(99)00082-6.
+  * Nagler, Pamela & Daughtry, Craig & Goward, Samuel. (2000). **Plant Litter and Soil Reflectance**. Remote Sensing of Environment. 71. 207-215. 10.1016/S0034-4257(99)00082-6.
 
 * **CRI1** & **CRI2** : Carotenoid Reflectance Index 1 - Aplicação: https://www.harrisgeospatial.com/docs/LeafPigments.html
-  * Gitelson, A., et al. "Assessing Carotenoid Content in Plant Leaves with Reflectance Spectroscopy." Photochemistry and Photobiology 75 (2002): 272-281.
+  * Gitelson, A., et al. **Assessing Carotenoid Content in Plant Leaves with Reflectance Spectroscopy**. Photochemistry and Photobiology 75 (2002): 272-281.
   
 * **EVI_1** : Enhanced Vegetation Index - Aplicações:
-  * Huete, A.; Didan, K.; Miura, T.; Rodriguez, E. P.; Gao, X.; Ferreira, L. G. Overview of the radiometric and biophysical performance of the MODIS vegetation indices. Remote Sensing of Environment 83(2002) 195-213
+  * Huete, A.; Didan, K.; Miura, T.; Rodriguez, E. P.; Gao, X.; Ferreira, L. G. **Overview of the radiometric and biophysical performance of the MODIS vegetation indices**. Remote Sensing of Environment 83(2002) 195-213
   
 * **EVI_2** : Enhanced Vegetation Index 2 - Aplicações:
-  * Jiang, Z.; Huete, A.R.; Didan, K.; Miura, T. Development of a two-band enhanced vegetation index without a blue band. Remote Sens. Environ., 112 (2008), pp. 3833-3845
+  * Jiang, Z.; Huete, A.R.; Didan, K.; Miura, T. **Development of a two-band enhanced vegetation index without a blue band**. Remote Sens. Environ., 112 (2008), pp. 3833-3845
   
 * **LAI** : Leaf Area Index (https://goo.gl/2EnggF)
 * **MSI** : Moisture Stress Index
@@ -115,7 +115,7 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 * **NDII** : Normalized Difference Infrared Index
 
 * **NDVI** : Normalized Difference Vegetation Index - Aplicações:
-  * Tucker, C.J.; Elgin, H.J.-Jr.; McMurtrey, J.E.I.; Fran, C.J. Monitoring corn and soybean crop development with hand-held radiometer spectral data. Remote Sens. Environ., 8 (1979), pp. 237-248, 10.1016/0034-4257(79)90004-X
+  * Tucker, C.J.; Elgin, H.J.-Jr.; McMurtrey, J.E.I.; Fran, C.J. **Monitoring corn and soybean crop development with hand-held radiometer spectral data**. Remote Sens. Environ., 8 (1979), pp. 237-248, 10.1016/0034-4257(79)90004-X
   
 * **NDWI_1** & **NDWI_2** : Normalized Difference Water Index
 * **PRI** : Photochemical Reflectance Index
