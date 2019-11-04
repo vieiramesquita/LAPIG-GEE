@@ -24,7 +24,7 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento - https://ww
 
 --------------
 
-- [Realizar os tutoriais da Google](https://developers.google.com/earth-engine/tutorial\_js\_01)
+- [Realizar tutoriais da Google](https://developers.google.com/earth-engine/tutorial\_js\_01)
 
 --------------
 
