@@ -13,7 +13,6 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento - https://ww
 ------
 
 ### Pré-requisito
--------------
 
 - Conhecimentos prévios de Sensoriamento Remoto e Sistemas de Informação Geográfica (SIG)
 - Vincular/Registrar a conta do Gmail ao Google Earth Engine: [Earth Engine account registration](https://signup.earthengine.google.com/)
@@ -22,12 +21,12 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento - https://ww
 
 ### Recomendado
 
---------------
-
 - [Realizar tutoriais da Google](https://developers.google.com/earth-engine/tutorial\_js\_01)
 
 --------------
 
 ### Introdução
+
+.
 
 ---------------
