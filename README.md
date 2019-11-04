@@ -33,6 +33,18 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 
 ---------------
 
+### Glossário
+
+.
+
+---------------
+
+### Índices
+
+.
+
+---------------
+
 ### S01 - [Recuperar Imagens Orbitais](https://code.earthengine.google.com/689f6ca00042d114b10813eba2035fc8)
 
 ---------------
@@ -49,10 +61,26 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 
 ---------------
 
-### S05 - [Gerar Mosaicos Livres de Nuvem de Indíces](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
+### S05 - [Gerar Mosaicos Livres de Nuvem de Índices](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
 
 ---------------
 
-### S06 - [Gerar Mosaicos Sintetizados de Indíces](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
+### S06 - [Gerar Mosaicos Sintetizados de Índices](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
+
+---------------
+
+### S07 - [Gerar Estatística de Zona em dados Sintetizados](https://code.earthengine.google.com/fcdd95dfaf682daf2c99d523472970cd)
+
+---------------
+
+### S08 - [Gerar Estatística de Zona em dados Sintetizados de Índices](https://code.earthengine.google.com/c31c81258282cd037c6675c4c0733860)
+
+---------------
+
+### S09 - [Gerar Estatística de Zona em Áreas de Pastagem](https://code.earthengine.google.com/5fe4127d63ff87021faf688ec6641512)
+
+---------------
+
+### S10 - [Classificação utilizando Random Forest](https://code.earthengine.google.com/5fe4127d63ff87021faf688ec6641512)
 
 ---------------
