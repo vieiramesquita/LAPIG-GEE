@@ -65,6 +65,18 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 ---------------
 
 <details>
+<summary> <b>Variáveis</b> </summary>
+<p>
+
+#### [Você pode aprender mais sobre as variáveis e como edita-las clicando aqui](link)
+
+----
+
+</p>
+</details>
+---------------
+
+<details>
 <summary> <b>Glossário</b> </summary>
 <p>
  
