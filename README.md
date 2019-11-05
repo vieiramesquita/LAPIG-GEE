@@ -92,13 +92,15 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 
 ---------------
 
-### Índices
+### Índices (https://www.indexdatabase.de)
 
 * **ARI_1** & **ARI_2** : Anthocyanin Reflectance Index - Aplicação: https://www.harrisgeospatial.com/docs/LeafPigments.html
-  * Gitelson, A., M. Merzlyak, and O. Chivkunova. **Optical Properties and Nondestructive Estimation of Anthocyanin Content in Plant   Leaves**. Photochemistry and Photobiology 71 (2001): 38-45.
+  * Gitelson, A., M. Merzlyak, and O. Chivkunova. **Optical Properties and Nondestructive Estimation of Anthocyanin Content in Plant Leaves**. Photochemistry and Photobiology 71 (2001): 38-45.
   
 * **CAI** : Cellulose Absorption Index - Aplicações:
   * Nagler, Pamela & Daughtry, Craig & Goward, Samuel. (2000). **Plant Litter and Soil Reflectance**. Remote Sensing of Environment. 71. 207-215. 10.1016/S0034-4257(99)00082-6.
+  * Nagler, P. L., Inoue, Y., Glenn, E. P., Russ, A. L., & Daughtry, C. S. T. (2003). **Celluloseabsorption index (CAI) to quantify mixed soil–plant litter scenes**.Remote Sensing of Environment,87, 310–325.
+  * Guerschman, J. -P., Hill, M. J., Barrett, D. J., Renzullo, L., Marks, A., & Botha, E. (2009). **Estimating fractional cover of photosynthetic vegetation, non-photosynthetic vegetationand soil in mixed tree–grassvegetationusing the EO-1 and MODIS sensors**. RemoteSensing of Environment,113,928–945.
 
 * **CRI1** & **CRI2** : Carotenoid Reflectance Index 1 - Aplicação: https://www.harrisgeospatial.com/docs/LeafPigments.html
   * Gitelson, A., et al. **Assessing Carotenoid Content in Plant Leaves with Reflectance Spectroscopy**. Photochemistry and Photobiology 75 (2002): 272-281.
@@ -109,23 +111,59 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 * **EVI_2** : Enhanced Vegetation Index 2 - Aplicações:
   * Jiang, Z.; Huete, A.R.; Didan, K.; Miura, T. **Development of a two-band enhanced vegetation index without a blue band**. Remote Sens. Environ., 112 (2008), pp. 3833-3845
   
-* **LAI** : Leaf Area Index (https://goo.gl/2EnggF)
-* **MSI** : Moisture Stress Index
-* **NDBI** : Normalized Difference Build-up Index
-* **NDII** : Normalized Difference Infrared Index
+* **LAI_1** & **LAI_2** : Leaf Area Index - Aplicações: https://www.sciencedirect.com/science/article/pii/S1110982315000551
+  * Faris, A.A.; Reddy, Y.S. **Estimation of urban heat island using Landsat ETM+ imagery at Chennai city – a case study**. Int. J. Earth Sci. Eng., 3 (2010), pp. 332-340
+  * Boegh, E., H. Soegaard, N. Broge, C. Hasager, N. Jensen, K. Schelde, and A. Thomsen. **Airborne Multi-spectral Data for Quantifying Leaf Area Index, Nitrogen Concentration and Photosynthetic Efficiency in Agriculture**. Remote Sensing of Environment 81, no. 2-3 (2002): 179-193.
+
+* **MSI** : Moisture Stress Index - Aplicações:
+  * Hunt, E.R. and Rock, B.N. 1989. **Detection of changes in leaf water content using near- and middle-infraredreflectances**. Remote Sensing of Environment, 30, 43–54.
+  
+* **NDBI** : Normalized Difference Build-up Index - Aplicações:
+  *  Zha, Y.; Gao, J. ; Ni, S. (2003) **Use of normalized difference built-up index in automatically mapping urban areas from TM imagery**, International Journal of Remote Sensing, 24:3, 583-594, DOI: 10.1080/01431160304987 
+
+* **NDII** : Normalized Difference Infrared Index - Aplicações:
+  * Hardisky, M. A., Klemas, V., & Smart, R. M. (1983). **The influences of soil salinity, growthform, and leaf moisture on the spectral reflectance ofSpartina alternifloracanopies**.Photogrammetric Engineering and Remote Sensing,49,77–83.
 
 * **NDVI** : Normalized Difference Vegetation Index - Aplicações:
+  * Rouse, J., R. Haas, J. Schell, and D. **Deering. Monitoring Vegetation Systems in the Great Plains with ERTS**. Third ERTS Symposium, NASA (1973): 309-317.
   * Tucker, C.J.; Elgin, H.J.-Jr.; McMurtrey, J.E.I.; Fran, C.J. **Monitoring corn and soybean crop development with hand-held radiometer spectral data**. Remote Sens. Environ., 8 (1979), pp. 237-248, 10.1016/0034-4257(79)90004-X
   
-* **NDWI_1** & **NDWI_2** : Normalized Difference Water Index
-* **PRI** : Photochemical Reflectance Index
-* **PSRI** : Plant Senescence Reflectance Index 
-* **PSSR** : Pigment Specific Simple Ratio
-* **RGR** : Red-Green Ratio
-* **RVSI** : Red-Edge Vegetation Stress Index
-* **SATVI** : Soil Adjusted Total Vegetation Index 
-* **SIPI_1** & SIPI_2 : Structure Insensitive Pigment Index 
-* **VARI** : Visible Atmospherically Resistant Index
-* **VIG** : Visible Index Green
+* **NDWI_1** & **NDWI_2** : Normalized Difference Water Index - Aplicações:
+  * **Conteúdo de Água nas folhas** (NDWI_1): Gao, B. **NDWI — A normalized difference water index for remote sensing of vegetation liquid water from space**. Remote Sensing of Environment, 58 (1996), pp. 257-266
+  * **Água no ambiente** (NDWI_2):  McFEETERS, S. K. (1996). **The use of the Normalized Difference Water Index (NDWI) in the delineation of open water features**, International Journal of Remote Sensing, 17:7, 1425-1432, DOI: 10.1080/01431169608948714 
+    
+* **PRI** : Photochemical Reflectance Index - Aplicações: https://www.harrisgeospatial.com/docs/LightUseEfficiency.html
+  * Penuelas, J., I. Filella, and J. Gamon. **Assessment of photosynthetic radiation-use efficiency with spectral reflectance**. New Phytologist 131 (1995): 291-296.
+  * Gamon, J., L. Serrano, and J. Surfus. **The Photochemical Reflectance Index: An Optical Indicator of Photosynthetic Radiation Use Efficiency Across Species, Functional Types and Nutrient Levels**. Oecologia 112 (1997): 492-501.
+
+* **PSRI** : Plant Senescence Reflectance Index - Aplicações: https://www.harrisgeospatial.com/docs/LightUseEfficiency.html
+  * Marsett, R. C., Qi, J. G., Heilman, P., Biedenbender, S. H., Watson, M. C., Amer, S., et al.(2006).**Remote sensing for grassland management in the arid Southwest**. RangeEcology and Management,59, 530–540
+
+* **PSSR** : Pigment Specific Simple Ratio - Aplicações:
+  *  Blackburn, G. A. (1998). **Spectral indices for estimating photosynthetic pigment concentrations: A test using senescent tree leaves**, International Journal of Remote Sensing, 19:4, 657-675, DOI: 10.1080/014311698215919 
+
+* **RGR** : Red-Green Ratio - Aplicações: https://www.harrisgeospatial.com/docs/LightUseEfficiency.html
+  * Gamon, J., and J. Surfus. **Assessing Leaf Pigment Content and Activity With a Reflectometer**. New Phytologist 143 (1999): 105-117.
+  * Sims, D. A., & Gamon, J. A. (2002). **Relationships between leaf pigment content andspectral reflectance across a wide range of species, leaf structures and developmentalstages**. Remote Sensing of Environment,81,337–354.
+
+* **RVSI** : Red-Edge Vegetation Stress Index - Aplicações:
+  * Merton, R. N. (1998). **Monitoring community hysteresis using spectral shift analysis and the red-edgevegetation stress index**. Proceedings of the Seventh Annual JPL Airborne Earth Science Workshop.NASA, Jet Propulsion Laboratory, Pasadena, California, USA. 12-16 January 1998.
+  * Merton, R., and J. Huntington. **Early simulation results of the ARIES-1 satellite sensor for multi-temporal vegetation research derived from AVIRIS**. NASA Jet Propulsion Lab., Pasadena, CA, 1999. 
+
+* **SAVI**: Soil Adjusted Vegetation Index - Aplicações: 
+  * Huete, A. R. 1988. **A soil-adjusted vegetation index (SAVI)**. Remote Sensing of Environment, 25, 295–309.
+
+* **SATVI** : Soil Adjusted Total Vegetation Index - Aplicações: 
+  * Marsett, R. C., Qi, J. G., Heilman, P., Biedenbender, S. H., Watson, M. C., Amer, S., et al.(2006). **Remote sensing for grassland management in the arid Southwest**. RangeEcology and Management,59, 530–540
+
+* **SIPI_1** & **SIPI_2** : Structure Insensitive Pigment Index - Aplicações: https://www.harrisgeospatial.com/docs/LightUseEfficiency.html
+  * Penuelas, J., F. Baret, and I. Filella. **Semi-Empirical Indices to Assess Carotenoids/Chlorophyll-a Ratio from Leaf Spectral Reflectance**. Photosynthetica 31 (1995): 221-230.
+  * Blackburn, G. A. (1998). **Spectral indices for estimating photosynthetic pigment concentrations: A test using senescent tree leaves**, International Journal of Remote Sensing, 19:4, 657-675, DOI: 10.1080/014311698215919
+
+* **VARI** : Visible Atmospherically Resistant Index - Aplicações: https://www.harrisgeospatial.com/docs/BroadbandGreenness.html#Visible
+  * Gitelson, A., et al. **Vegetation and Soil Lines in Visible Spectral Space: A Concept and Technique for Remote Estimation of Vegetation Fraction**. International Journal of Remote Sensing 23 (2002): 2537−2562.
+  
+* **VIG** : Visible Index Green - Aplicações:
+  * Gitelson, A.A.; Kaufman, Y.J.; Stark, R.; Rundquist, D. **Novel algorithms for remote estimation of vegetation fraction**. Remote Sens. Environ., 80 (2002), pp. 76-87
 
 ---------------
