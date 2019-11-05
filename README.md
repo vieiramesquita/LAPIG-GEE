@@ -56,11 +56,9 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 
 ### S08 - [Gerar Estatística de Zona em dados Sintetizados de Índices](https://code.earthengine.google.com/c31c81258282cd037c6675c4c0733860)
 
----------------
 
 ### S09 - [Gerar Estatística de Zona em Áreas de Pastagem](https://code.earthengine.google.com/5fe4127d63ff87021faf688ec6641512)
 
----------------
 
 ### S10 - [Classificação utilizando Random Forest](https://code.earthengine.google.com/327cf98ff134314a7c9c72975f113b17)
 
