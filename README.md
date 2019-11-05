@@ -35,31 +35,24 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 
 ### S01 - [Recuperar Imagens Orbitais](https://code.earthengine.google.com/689f6ca00042d114b10813eba2035fc8)
 
----------------
 
 ### S02 - [Aplicar Funções Redutoras](https://code.earthengine.google.com/6530a143b510209b0caace162931739c)
 
----------------
 
 ### S03 - [Gerar Mosaicos Livres de Nuvem](https://code.earthengine.google.com/7fb8756e59e06809696b6e04f9d495da)
 
----------------
 
 ### S04 - [Gerar Mosaicos Sintetizados](https://code.earthengine.google.com/956b985eedd7d8391ec5af39cb3a7d72)
 
----------------
 
 ### S05 - [Gerar Mosaicos Livres de Nuvem de Índices](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
 
----------------
 
 ### S06 - [Gerar Mosaicos Sintetizados de Índices](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
 
----------------
 
 ### S07 - [Gerar Estatística de Zona em dados Sintetizados](https://code.earthengine.google.com/fcdd95dfaf682daf2c99d523472970cd)
 
----------------
 
 ### S08 - [Gerar Estatística de Zona em dados Sintetizados de Índices](https://code.earthengine.google.com/c31c81258282cd037c6675c4c0733860)
 
