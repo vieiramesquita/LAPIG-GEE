@@ -7,6 +7,7 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 --------------
 
 ### Agradecimentos
+- Equipe LAPIG
 - Iniciativa Mapbiomas
 - Universidade Federal de Goiás
 - Google / Earth Engine Team
@@ -73,26 +74,35 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 
 ---------------
 
-### Glossário
+<details>
+<summary> <b>Glossário</b> </summary>
+<p>
+ 
+* **TOA**: Reflectancia de topo de atmosfera
+* **SR**: Reflectancia de superficie
+* **Chuva**: Coloracao padrao do dado. e.g. precipitacao em mm/h
+* **ALT**: Altitude/Elevacao em metros
+* **TEMP**: Temperatura de Superficie (LST)
+* **NDVI**: Indice de vegetacao com diferenca normalizada (Nir-Red / Nir+Red)
+* **EVI**: Indice de vegetacao melhorado (2.5 * (Nir - Red)/ 1 + Nir + 6*Red + 7.5*Blue)
+* **ET/PET**: Evapotranspiracao total / Evapotranspiracao potencial total em mm
+* **Agri**: Compoiscao colorida utilizada na deteccao de areas agricolas (Swir/Nir/Red)
+* **False**: Composicao colorida utilizada para dar enfase a vegetacao (Nir/Swir/Red ou Nir/Red/Green)
+* **False20**: Semelhante ao 'False', porém realiza a composição com as bandas de 20m de Sentinel 2
+* **True**: Composicao colorida que reproduz as cores "naturais" (Red/Green/Blue)
+* **SAR**: Diferenca de eixo de polarizacao (Radar - VV,VH,VH)
+* **OIL**: Visualização da polarização VV (Radar) com realce específico para vazamentos de óleo
 
-* TOA: Reflectancia de topo de atmosfera
-* SR: Reflectancia de superficie
-* Chuva: Coloracao padrao do dado. e.g. precipitacao em mm/h
-* ALT: Altitude/Elevacao em metros
-* TEMP: Temperatura de Superficie (LST)
-* NDVI: Indice de vegetacao com diferenca normalizada (Nir-Red / Nir+Red)
-* EVI: Indice de vegetacao melhorado (2.5 * (Nir - Red)/ 1 + Nir + 6*Red + 7.5*Blue)
-* ET/PET: Evapotranspiracao total / Evapotranspiracao potencial total em mm
-* Agri: Compoiscao colorida utilizada na deteccao de areas agricolas (Swir/Nir/Red)
-* False: Composicao colorida utilizada para dar enfase a vegetacao (Nir/Swir/Red ou Nir/Red/Green)
-* False20: Semelhante ao 'False', porém realiza a composição com as bandas de 20m de Sentinel 2
-* True: Composicao colorida que reproduz as cores "naturais" (Red/Green/Blue)
-* SAR: Diferenca de eixo de polarizacao (Radar - VV,VH,VH)
-* OIL: Visualização da polarização VV (Radar) com realce específico para vazamentos de óleo
+</p>
+</details>
 
 ---------------
 
-### Índices (https://www.indexdatabase.de)
+<details>
+<summary> <b>Índices</b> </summary>
+<p>
+
+<u> Você pode encontrar mais índices aqui: https://www.indexdatabase.de </u>
 
 * **ARI_1** & **ARI_2** : Anthocyanin Reflectance Index - Aplicação:
   * Gitelson, A., M. Merzlyak, and O. Chivkunova. **Optical Properties and Nondestructive Estimation of Anthocyanin Content in Plant Leaves**. Photochemistry and Photobiology 71 (2001): 38-45.
@@ -173,5 +183,8 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
   
 * **VIG** : Visible Index Green - Aplicações:
   * Gitelson, A.A.; Kaufman, Y.J.; Stark, R.; Rundquist, D. **Novel algorithms for remote estimation of vegetation fraction**. Remote Sens. Environ., 80 (2002), pp. 76-87
+
+</p>
+</details>
 
 ---------------
