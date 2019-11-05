@@ -17,7 +17,7 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 
 - Conhecimentos prévios de Sensoriamento Remoto e Sistemas de Informação Geográfica (SIG)
 - Vincular/Registrar a conta do Gmail ao Google Earth Engine: [Earth Engine account registration](https://signup.earthengine.google.com/)
-- Adicionar o repositório de scripts GEE do LAPIG ([basta apenas acessar este link uma vez](https://code.earthengine.google.com/?accept_repo=users/vieiramesquita/LAPIG-GEE)) 
+- Adicionar o repositório de scripts GEE do LAPIG ([Basta apenas acessar este link uma vez](https://code.earthengine.google.com/?accept_repo=users/vieiramesquita/LAPIG-GEE)) 
 
 -------------
 
