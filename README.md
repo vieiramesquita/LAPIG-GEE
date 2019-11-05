@@ -68,12 +68,13 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 <summary> <b>Variáveis</b> </summary>
 <p>
 
-#### [Você pode aprender mais sobre as variáveis e como edita-las clicando aqui](https://github.com/vieiramesquita/LAPIG-GEE/blob/master/VARIAVEIS.md)
+#### [Você pode aprender mais sobre as variáveis utilizadas no curso e como edita-las clicando aqui](https://github.com/vieiramesquita/LAPIG-GEE/blob/master/VARIAVEIS.md)
 
 ----
 
 </p>
 </details>
+
 ---------------
 
 <details>
