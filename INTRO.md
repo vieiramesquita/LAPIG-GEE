@@ -45,7 +45,7 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 ### S04 - [Gerar Mosaicos Sintetizados](https://code.earthengine.google.com/956b985eedd7d8391ec5af39cb3a7d72)
 
 
-### S05 - [Gerar Mosaicos Livres de Nuvem de Índices](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
+### S05 - [Gerar Mosaicos de Índices Livres de Nuvem](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
 
 
 ### S06 - [Gerar Mosaicos Sintetizados de Índices](https://code.earthengine.google.com/a6fb6071301f35a2f9977eb2dcfe2c65)
