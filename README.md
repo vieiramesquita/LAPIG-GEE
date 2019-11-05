@@ -96,8 +96,9 @@ LAPIG - Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) 
 </p>
 </details>
 
+
 ---------------
----------------
+
 
 <details><summary> <b>Índices</b> </summary>
  
