@@ -17,6 +17,8 @@ A variável ``satelite`` demonstrada abaixo é reponsável pela seleção do tip
 
 ```JavaScript
 
+var satelite = 'MOD13';
+var satelite = 'L5_TOA';
 var satelite = 'S2';
 
 ```
@@ -28,6 +30,8 @@ Para definir as paletas de cores ou composições de visualização é necessár
 ```JavaScript
 
 var realce = 'OIL';
+var realce = 'False';
+var realce = 'CHUVA';
 
 ```
 
@@ -35,12 +39,99 @@ var realce = 'OIL';
 
 No Earth Engine cada dado, ou série de dados, possui uma informação referente a data que possibilita a filtragem das informações para períodos restritos. O sistem de datas utilizado na plataforma é o americano (Ano-Mês-Dia)como demontrado nas variáveis ``data_inicial`` e ``data_final`` abaixo.
 
-```JavaScript
+```javascript
 
 var data_inicial = '2016-01-01';
 var data_final = '2016-12-31';
 
 ```
+
+### Selecionar bandas específicas para exportação
+
+É possível filtrar as bandas que você deseja exportar modificando a variável ``bandas`` como nos exemplos abaixo. Caso você queira exportar todas as bandas de um dado basta deixar a variável como no primeiro exemplo. Você pode acessar banco de dados do Earth Engine para saber quais bandas você pode exportar ou acessar o console do Code Editor e clicar na aba de bandas da sua imagens de interesse.
+
+```javascript
+
+var bandas = ['']
+var bandas = ['B1','B2','B3']
+var bandas = ['B4','B3','B1']
+var bandas = ['NDVI']
+var bandas = ['ET','PET']
+
+```
+
+### Indicar diretório de exportação
+
+É necessário indicar para onde os dados serão exportados (Google Drive, Assest ou Google Cloud). Para isso você precisa indicar na variável ``diretorio_destino`` em qual o diretório serão salvos os seus dados. Para exportar as infomrações basta clicar na aba "**Task"** e exportar os dados.
+
+```javascript
+
+var diretorio_destino = 'GOOGLE_GEE_DIR'
+
+```
+
+### Visualizar a partir de Coordenada específica
+
+Em alguns scripts é possível centrar a visualização removendo os comentários das variáveis ``lon``  e ``lat``, e habilitando os argumentos de **"lat"** e **"long"** na função de requisição 
+
+Ex.: ``utils.recuperarImagens(satelite, realce, data_inicial, data_final, diretorio_destino, bandas, **lat**, **lon**,mascarar_nuvens)``
+
+```javascript
+
+var lon = -61.0236
+var lat = 2.5502
+
+```
+
+### Aplicar máscaras vetoriais
+
+A variável ``mascara`` é utilizada para armazenar os vetores necessários para recortar/delimitar a área de interesse. Esse curso trás alguns vetores já precarregados no Earth Engine. É possíve realziar o upload de um Shapefile utiliza-lo a partir do seu **ID** como no primeiro exemplo.
+
+```javascript
+
+var mascara = ee.FeatureCollection("users/lealparente/matopiba");
+var regiao = utils.vetores.biomas.filter(ee.Filter.eq('NM_BIOMA','PANTANAL'))
+
+```
+
+
+### Filtrar nuvens, ruídos e "_Bad Data_"
+
+Alguns scripts possuem a função de filtrar a parir de dados de qualidade de pixel como mostrado abaixo. Esse filtro é habilitado nativamente na maioria dos processamentos realizados durante o curso. 
+
+```javascript
+
+var mascarar_nuvens = false
+
+```
+
+### Filtros redutores de séries
+
+
+
+```javascript
+
+var redutor = ee.Reducer.median()
+
+```
+
+
+var nome_sufixo = 'MEDIANA'
+
+var clip = false
+utils.gerarMosaicos(satelite, realce, data_inicial, data_final, diretorio_destino, mascara, nome_sufixo, clip)
+
+var centerVis = true
+
+var expressao = LAI
+
+var expressao_realce = LAI_REALCE
+
+var filtro = ee.Reducer.sum()
+
+var estatistica = ee.Reducer.min()
+                 .combine(ee.Reducer.max(), null, true)
+                 .combine(ee.Reducer.mean(), null, true)
 
 ---------------
 
@@ -113,7 +204,7 @@ Não necessita de data_inicial e/ou data_final
     var data_final = 'Atual'
 
 ### [SENTINEL 3 OLCI](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S3_OLCI)
-    var satelite = Sentinel 3: 'S3'
+    var satelite = 'S3'
     var realce = 'False' ou 'True'
     var data_inicial = '2016-10-18'
     var data_final = 'Atual'
