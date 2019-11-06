@@ -3,7 +3,6 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 
 --------------
 # Introdução ao Processamento em nuvem atráves da plataforma Google Earth Engine
---------------
 
 ### Agradecimentos
 - Equipe LAPIG
