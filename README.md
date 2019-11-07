@@ -26,10 +26,6 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 
 --------------
 
-### Introdução
-
-.
-
 ---------------
 ## Scripts
 
@@ -102,7 +98,7 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 ---------------
 
 
-<details><summary> <b>Índices Espectrais</b> </summary>
+<details><summary> <b>Índices Espectrais (Working)</b> </summary>
  
 <p>
 
