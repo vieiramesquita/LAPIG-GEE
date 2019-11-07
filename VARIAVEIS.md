@@ -37,7 +37,7 @@ var realce = 'CHUVA';
 
 ### Datas iniciais e finais de séries temporais
 
-No Earth Engine cada dado, ou série de dados, possui uma informação referente a data que possibilita a filtragem das informações para períodos restritos. O sistem de datas utilizado na plataforma é o americano (Ano-Mês-Dia)como demontrado nas variáveis ``data_inicial`` e ``data_final`` abaixo.
+No Earth Engine cada dado, ou série de dados, possui uma informação referente a data que possibilita a filtragem das informações para períodos restritos. O sistema de datas utilizado na plataforma é o americano (Ano-Mês-Dia) como demonstrado nas variáveis ``data_inicial`` e ``data_final`` abaixo.
 
 ```javascript
 
@@ -62,7 +62,7 @@ var bandas = ['ET','PET']
 
 ### Indicar diretório de exportação
 
-É necessário indicar para onde os dados serão exportados (Google Drive, Assest ou Google Cloud). Para isso você precisa indicar na variável ``diretorio_destino`` em qual o diretório serão salvos os seus dados. Para exportar as infomrações basta clicar na aba "**Task"** e exportar os dados.
+É necessário indicar para onde os dados serão exportados (Google Drive, Assest ou Google Cloud). Para isso você precisa indicar na variável ``diretorio_destino`` em qual o diretório será salvo os seus dados. Para exportar as informações basta clicar na aba "**Task"** e exportar os dados.
 
 ```javascript
 
@@ -85,7 +85,7 @@ var lat = 2.5502
 
 ### Aplicar máscaras vetoriais
 
-A variável ``mascara`` é utilizada para armazenar os vetores necessários para delimitar a área de interesse. Esse curso trás alguns vetores já precarregados no Earth Engine. É possíve realziar o upload de um Shapefile utiliza-lo a partir do seu **ID** como no primeiro exemplo.
+A variável ``mascara`` é utilizada para armazenar os vetores necessários para delimitar a área de interesse. Esse curso traz alguns vetores já precarregados no Earth Engine. É possível realizar o upload de um Shapefile utilizá-lo a partir do seu **ID** como no primeiro exemplo.
 
 ```javascript
 
@@ -152,7 +152,7 @@ var clip = false //Desbilita o recorte
 
 ### Desabilitar/Habilitar centralização/reset de visualização (BETA)
 
-Em alguns casos a centralização de visualização pode atrapalhar na análises inspeção dos dados. Pensando em otimizar esse problema, foi criada a variável ``centerVis`` com o objetivo de habilitar/desabilitar a centralização/reset de visualização.
+Em alguns casos a centralização de visualização pode atrapalhar nas análises visuais dos dados. Pensando em otimizar esse problema, foi criada a variável ``centerVis`` com o objetivo de habilitar/desabilitar a centralização/reset de visualização.
 
 ```javascript
 
@@ -162,7 +162,7 @@ var centerVis = true
 
 ### Cáculos de índices ou expressões
 
-Os scripts que trabalham com o uso de índices espectrais fazem uso das variáveis ``expressao`` e ``expressao_realce``, porém estas variáveis devem conter outras que fazem referência as expressões matemáticas, limite de realce e paletas de cores como demosntrado abaixo nas variáveis ``LAI_1`` e  ``LAI_1_REALCE``.
+Os scripts que trabalham com o uso de índices espectrais fazem uso das variáveis ``expressao`` e ``expressao_realce``, porém estas variáveis devem conter outras que fazem referência as expressões matemáticas, limite de realce e paletas de cores como demonstrado abaixo nas variáveis ``LAI_1`` e  ``LAI_1_REALCE``.
 
 ```javascript
 
@@ -176,13 +176,13 @@ var expressao_realce = LAI_REALCE
 
 ```
 
-É possivel encontrar alguns índices disponíveis nos próprios scripts e suas referências na seção **"Índices Espectrais"** na [página principal](https://github.com/vieiramesquita/LAPIG-GEE).
+É possível encontrar alguns índices disponíveis nos próprios scripts e suas referências na seção **"Índices Espectrais"** na [página principal](https://github.com/vieiramesquita/LAPIG-GEE).
 
 Você pode encontrar também mais paletas de cores através deste [link](https://github.com/gee-community/ee-palettes).
 
 ### Filtros de estatística de área
 
-Assim como os filtros de redução de séries temporais, os filtros estatísticos fazem uso das mesmas funções. Porém nesse caso é possível combina-los como mostrado no segundo exemplo da variável ``estatística``.
+Assim como os filtros de redução de séries temporais, os filtros estatísticos fazem uso das mesmas funções. Porém nesse caso é possível combiná-los como mostrado no segundo exemplo da variável ``estatística``.
 
 ```javascript
 
