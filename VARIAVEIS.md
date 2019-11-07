@@ -3,7 +3,7 @@
 ### Utilitários
 
 A variável ``utils`` abaixo se encontra na primeira linha de todos os scripts e é responsável por fazer a chamada do script mestre que contém todas as funções utilizadas no curso.
-É possível acessar esse script pelo [**link**](https://code.earthengine.google.com/fa8f980b77fcbe151f54bd4727f7f26e), porém é recomendado ter conhecimento prévio de programação na plataforma se você tiver interesse em se aventurar neste código.
+É possível acessar esse script pelo [**link**](https://code.earthengine.google.com/fa8f980b77fcbe151f54bd4727f7f26e), porém é recomendado ter conhecimento prévio de programação na plataforma caso haja interesse em se aventurar nesse código.
 
 ```JavaScript
 
