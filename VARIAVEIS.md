@@ -176,7 +176,7 @@ var expressao_realce = LAI_REALCE
 
 ```
 
-É possivel encontrar alguns índices disponíveis nos próprios scripts e suas referências na [página principal](https://github.com/vieiramesquita/LAPIG-GEE).
+É possivel encontrar alguns índices disponíveis nos próprios scripts e suas referências na seção **"Índices Espectrais"** na [página principal](https://github.com/vieiramesquita/LAPIG-GEE).
 
 Você pode encontrar também mais paletas de cores através deste [link](https://github.com/gee-community/ee-palettes).
 
