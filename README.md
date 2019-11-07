@@ -31,6 +31,8 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 .
 
 ---------------
+## Scripts
+
 
 ### S01 - [Recuperar Imagens Orbitais](https://code.earthengine.google.com/689f6ca00042d114b10813eba2035fc8)
 
