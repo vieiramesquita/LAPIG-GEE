@@ -77,18 +77,18 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 <p>
  
 * **TOA**: Reflectância de topo de atmosfera
-* **SR**: Reflectância de superficie
+* **SR**: Reflectância de superfície
 * **Chuva**: Coloração padrão do dado. e.g. precipitação em mm/h
 * **ALT**: Altitude/Elevação em metros
 * **TEMP**: Temperatura de Superfície (LST)
 * **NDVI**: Índice de vegetação com diferença normalizada (Nir-Red / Nir+Red)
 * **EVI**: Índice de vegetação melhorado (2.5 * (Nir - Red)/ 1 + Nir + 6*Red + 7.5*Blue)
 * **ET/PET**: Evapotranspiração total / Evapotranspiração potencial total em mm
-* **Agri**: Compoisção colorida utilizada na detecção de áreas agrícolas (Swir/Nir/Red)
-* **False**: Compoisção colorida utilizada para dar ênfase a vegetação (Nir/Swir/Red ou Nir/Red/Green)
+* **Agri**: Composição colorida utilizada na detecção de áreas agrícolas (Swir/Nir/Red)
+* **False**: Composição colorida utilizada para dar ênfase a vegetação (Nir/Swir/Red ou Nir/Red/Green)
 * **False20**: Semelhante ao 'False', porém realiza a composição com as bandas de 20m de Sentinel 2
-* **True**: Compoisção colorida que reproduz as cores "naturais" (Red/Green/Blue)
-* **SAR**: Diferença de eixo de polarizacao (Radar - VV,VH,VH)
+* **True**: Composição colorida que reproduz as cores "naturais" (Red/Green/Blue)
+* **SAR**: Diferença de eixo de polarização (Radar - VV,VH,VH)
 * **OIL**: Visualização da polarização VV (Radar) com realce específico para vazamentos de óleo
 
 </p>
