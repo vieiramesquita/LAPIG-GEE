@@ -20,7 +20,7 @@ A variável ``satelite`` demonstrada abaixo é reponsável pela seleção do tip
 var satelite = 'MOD13';
 var satelite = 'L5_TOA';
 var satelite = 'S2';
-Bar satelite = 'S2SR'
+Bar satelite = 'S2_SR'
 
 ```
 
