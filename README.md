@@ -96,7 +96,7 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 ---------------
 
 
-<details><summary> <b>Índices Espectrais (Working)</b> </summary>
+<details><summary> <b>Índices Espectrais (Under construction)</b> </summary>
  
 <p>
 
