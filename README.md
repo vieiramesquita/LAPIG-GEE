@@ -24,8 +24,8 @@ Laboratório de Processamento de Imagens e Geoprocessamento (LAPIG/UFG) - https:
 
 - [Realizar tutoriais da Google](https://developers.google.com/earth-engine/guides)
 - [Tutoriais:] 
-(https://courses.spatialthoughts.com/end-to-end-gee.html)
-... UPDATING ...
+--(https://courses.spatialthoughts.com/end-to-end-gee.html)
+--... UPDATING ...
  
 
 ---------------
